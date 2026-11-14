@@ -16,18 +16,135 @@
 
 .hc-mode {
   --bg: #000000 !important;
-  --surface: #000000 !important;
-  --raised-grad: #000000 !important;
-  --raised-sm-grad: #000000 !important;
-  --inset-bg: #111111 !important;
-  --shadow-light: #ffffff !important;
-  --shadow-dark: #ffffff !important;
-  --border: #ffffff !important;
+  --surface: #0a0a0a !important;
+  --raised-grad: #111111 !important;
+  --raised-sm-grad: #181818 !important;
+  --inset-bg: #050505 !important;
+  --shadow-light: rgba(255, 255, 255, 0.25) !important;
+  --shadow-dark: rgba(0, 0, 0, 0.95) !important;
+  --border: #444444 !important;
   --text: #ffffff !important;
   --text-muted: #ffea00 !important;
   --accent: #ffea00 !important;
-  --accent-glow: #ffea00 !important;
+  --accent-glow: rgba(255, 234, 0, 0.5) !important;
   --led-amber: #ffea00 !important;
+}
+
+.hc-mode .radio-chassis {
+  border: 2px solid #ffea00;
+  box-shadow: 0 0 20px rgba(255, 234, 0, 0.2) !important;
+}
+
+.hc-mode .neu-panel {
+  border: 1px solid #555555;
+  box-shadow: none !important;
+}
+
+.hc-mode .panel-title-bar h2 {
+  color: #ffea00 !important;
+}
+
+.hc-mode .track-btn {
+  border: 1px solid #444444;
+  background: #141414 !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.hc-mode .track-btn:hover {
+  border-color: #ffea00;
+}
+
+.hc-mode .track-btn[aria-selected="true"] {
+  border: 2px solid #ffea00 !important;
+  background: #222222 !important;
+  color: #ffea00 !important;
+}
+
+.hc-mode .track-btn .track-name {
+  color: #ffffff !important;
+}
+
+.hc-mode .track-btn[aria-selected="true"] .track-name {
+  color: #ffea00 !important;
+}
+
+.hc-mode .track-top {
+  color: #cccccc !important;
+  opacity: 1 !important;
+}
+
+.hc-mode .track-btn .track-badge {
+  background: #2a2a2a !important;
+  color: #ffffff !important;
+  border: 1px solid #555555;
+}
+
+.hc-mode .track-btn[aria-selected="true"] .track-badge {
+  background: #ffea00 !important;
+  color: #000000 !important;
+  font-weight: 800;
+}
+
+.hc-mode .brand-title h1 {
+  color: #ffffff !important;
+}
+
+.hc-mode .brand-title .brand-freq {
+  color: #ffea00 !important;
+}
+
+.hc-mode .why-text {
+  color: #ffea00 !important;
+}
+
+.hc-mode .field {
+  color: #ffffff !important;
+}
+
+.hc-mode .field strong {
+  color: #ffea00 !important;
+}
+
+.hc-mode .map-card h3 {
+  color: #ffea00 !important;
+}
+
+.hc-mode .map-card p {
+  color: #ffffff !important;
+}
+
+.hc-mode .neu-btn {
+  border: 1px solid #666666;
+  background: #181818 !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.hc-mode .neu-btn:hover {
+  border-color: #ffea00;
+  color: #ffea00 !important;
+}
+
+.hc-mode .neu-btn[aria-pressed="true"],
+.hc-mode .neu-btn:active {
+  background: #ffea00 !important;
+  color: #000000 !important;
+  font-weight: 800;
+  border-color: #ffea00 !important;
+}
+
+.hc-mode .neu-btn-primary {
+  background: #ffea00 !important;
+  color: #000000 !important;
+  font-weight: 800;
+  border: 2px solid #ffffff !important;
+}
+
+.hc-mode .neu-select {
+  background: #181818 !important;
+  color: #ffffff !important;
+  border-color: #666666 !important;
 }
 
 * {
