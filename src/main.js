@@ -6,6 +6,7 @@ import { AudioEngine } from './engine.js';
 import { FrameSequencer } from './sequencer.js';
 import { Narrator } from './narrator.js';
 import { playDetentClick, triggerHaptic } from './tactileAudio.js';
+import { VoiceController } from './voice.js';
 import {
   buildStyleButtons,
   buildTrackShelf,
@@ -25,6 +26,7 @@ const stripCtx = stripCanvas.getContext('2d');
 const engine = new AudioEngine();
 const sequencer = new FrameSequencer();
 const narrator = new Narrator(document.getElementById('live-cap'));
+let voiceCtrl = null;
 
 const state = {
   tracks: [],
@@ -291,6 +293,175 @@ function setupRotaryKnob() {
   updateRotaryVisual(state.speed);
 }
 
+function handleVoiceCommand(cmd) {
+  if (!cmd) return;
+  playDetentClick(1020, 0.035);
+
+  switch (cmd.type) {
+    case 'play':
+      setPlaying(true);
+      break;
+
+    case 'pause':
+      setPlaying(false);
+      break;
+
+    case 'toggle_play':
+      setPlaying(!state.playing);
+      break;
+
+    case 'set_loop':
+      state.loop = cmd.value;
+      const loopBtn = document.getElementById('btn-loop');
+      loopBtn.setAttribute('aria-pressed', String(state.loop));
+      loopBtn.textContent = `Loop: ${state.loop ? 'On' : 'Off'}`;
+      break;
+
+    case 'set_scale':
+      state.scaleId = cmd.value;
+      document.getElementById('sel-scale').value = state.scaleId;
+      syncHash();
+      break;
+
+    case 'set_scan':
+      state.scanMode = cmd.value;
+      document.getElementById('sel-scan').value = state.scanMode;
+      state.pos = 0;
+      analyzeCurrentCanvas();
+      break;
+
+    case 'set_speed':
+      state.speed = Math.max(1, Math.min(5, cmd.value));
+      document.getElementById('rng-spd').value = String(state.speed);
+      document.getElementById('lbl-spd').textContent = String(state.speed);
+      updateRotaryVisual(state.speed);
+      if (state.playing) {
+        engine.startScheduler(() => getStepIntervalMs() / 1000, step);
+      }
+      syncHash();
+      break;
+
+    case 'adjust_speed':
+      state.speed = Math.max(1, Math.min(5, state.speed + cmd.delta));
+      document.getElementById('rng-spd').value = String(state.speed);
+      document.getElementById('lbl-spd').textContent = String(state.speed);
+      updateRotaryVisual(state.speed);
+      if (state.playing) {
+        engine.startScheduler(() => getStepIntervalMs() / 1000, step);
+      }
+      syncHash();
+      break;
+
+    case 'set_style':
+      state.selectedStyle = cmd.value;
+      analyzeCurrentCanvas();
+      syncHash();
+      break;
+
+    case 'select_track_name':
+      const foundIdx = state.tracks.findIndex((t) =>
+        t.name.toLowerCase().includes(cmd.query) || t.id.toLowerCase().includes(cmd.query)
+      );
+      if (foundIdx !== -1) {
+        selectTrack(foundIdx, false);
+      }
+      break;
+
+    case 'next_track':
+      selectTrack((state.trackIdx + 1) % state.tracks.length, false);
+      break;
+
+    case 'prev_track':
+      selectTrack((state.trackIdx - 1 + state.tracks.length) % state.tracks.length, false);
+      break;
+
+    case 'toggle_contrast':
+      toggleHighContrast();
+      break;
+
+    case 'set_narration':
+      narrator.setEnabled(cmd.value);
+      const voiceBtn = document.getElementById('btn-voice');
+      voiceBtn.setAttribute('aria-pressed', String(cmd.value));
+      voiceBtn.textContent = `Narration: ${cmd.value ? 'On' : 'Off'}`;
+      break;
+
+    default:
+      break;
+  }
+}
+
+function toggleHighContrast() {
+  playDetentClick(1100, 0.03);
+  const on = document.documentElement.classList.toggle('hc-mode');
+  document.getElementById('btn-hc').setAttribute('aria-pressed', String(on));
+}
+
+function setupGlobalShortcuts() {
+  window.addEventListener('keydown', (e) => {
+    // Skip if typing in an input or select
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+
+    if (e.code === 'Space') {
+      e.preventDefault();
+      setPlaying(!state.playing);
+    } else if (e.key === 'v' || e.key === 'V') {
+      e.preventDefault();
+      if (voiceCtrl) voiceCtrl.toggle();
+    } else if (e.key === 'n' || e.key === 'N') {
+      e.preventDefault();
+      const next = !narrator.enabled;
+      narrator.setEnabled(next);
+      const vBtn = document.getElementById('btn-voice');
+      vBtn.setAttribute('aria-pressed', String(next));
+      vBtn.textContent = `Narration: ${next ? 'On' : 'Off'}`;
+    } else if (e.key === 'h' || e.key === 'H') {
+      e.preventDefault();
+      toggleHighContrast();
+    } else if (e.key === 'l' || e.key === 'L') {
+      e.preventDefault();
+      state.loop = !state.loop;
+      const lBtn = document.getElementById('btn-loop');
+      lBtn.setAttribute('aria-pressed', String(state.loop));
+      lBtn.textContent = `Loop: ${state.loop ? 'On' : 'Off'}`;
+      playDetentClick(680, 0.02);
+    } else if (['1', '2', '3', '4', '5'].includes(e.key)) {
+      const spd = Number(e.key);
+      state.speed = spd;
+      document.getElementById('rng-spd').value = String(spd);
+      document.getElementById('lbl-spd').textContent = String(spd);
+      updateRotaryVisual(spd);
+      playDetentClick(600 + spd * 80, 0.02);
+      if (state.playing) {
+        engine.startScheduler(() => getStepIntervalMs() / 1000, step);
+      }
+      syncHash();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      const rngVol = document.getElementById('rng-vol');
+      const nextVol = Math.min(100, Number(rngVol.value) + 5);
+      rngVol.value = String(nextVol);
+      document.getElementById('lbl-vol').textContent = `${nextVol}%`;
+      engine.setVolume(nextVol / 100);
+      playDetentClick(880, 0.015);
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      const rngVol = document.getElementById('rng-vol');
+      const nextVol = Math.max(0, Number(rngVol.value) - 5);
+      rngVol.value = String(nextVol);
+      document.getElementById('lbl-vol').textContent = `${nextVol}%`;
+      engine.setVolume(nextVol / 100);
+      playDetentClick(720, 0.015);
+    } else if (e.key === '?') {
+      e.preventDefault();
+      const panel = document.getElementById('panel-shortcuts');
+      panel.hidden = !panel.hidden;
+      document.getElementById('btn-shortcuts').setAttribute('aria-expanded', String(!panel.hidden));
+      playDetentClick(800, 0.02);
+    }
+  });
+}
+
 function applyHashState() {
   if (!window.location.hash || window.location.hash.length < 2) return;
   const params = new URLSearchParams(window.location.hash.slice(1));
@@ -385,11 +556,7 @@ async function init() {
     await renderCurrentFrame();
   };
 
-  document.getElementById('btn-hc').onclick = function () {
-    playDetentClick(1100, 0.03);
-    const on = document.documentElement.classList.toggle('hc-mode');
-    this.setAttribute('aria-pressed', String(on));
-  };
+  document.getElementById('btn-hc').onclick = toggleHighContrast;
   document.getElementById('btn-voice').onclick = function () {
     playDetentClick(900, 0.03);
     const next = !narrator.enabled;
@@ -397,6 +564,46 @@ async function init() {
     this.setAttribute('aria-pressed', String(next));
     this.textContent = `Narration: ${next ? 'On' : 'Off'}`;
   };
+
+  // Voice Controller integration
+  voiceCtrl = new VoiceController({
+    onCommand: (cmd, raw) => {
+      handleVoiceCommand(cmd);
+    },
+    onStatus: (status) => {
+      const btn = document.getElementById('btn-voice-cmd');
+      if (btn) {
+        btn.textContent = status.listening ? '🎙️ Voice: Listening...' : '🎙️ Voice: Off';
+        btn.setAttribute('aria-pressed', String(status.listening));
+      }
+      if (status.text) {
+        narrator.updateCaption(status.text, 2500);
+      }
+    }
+  });
+
+  document.getElementById('btn-voice-cmd').onclick = function () {
+    playDetentClick(920, 0.025);
+    if (!voiceCtrl.supported) {
+      narrator.speak('Web Speech recognition is not supported in this browser. Please use Chrome or Edge.');
+      return;
+    }
+    voiceCtrl.toggle();
+  };
+
+  // Shortcuts panel
+  document.getElementById('btn-shortcuts').onclick = function () {
+    playDetentClick(800, 0.02);
+    const panel = document.getElementById('panel-shortcuts');
+    panel.hidden = !panel.hidden;
+    this.setAttribute('aria-expanded', String(!panel.hidden));
+  };
+  document.getElementById('close-shortcuts').onclick = () => {
+    playDetentClick(600, 0.02);
+    document.getElementById('panel-shortcuts').hidden = true;
+    document.getElementById('btn-shortcuts').setAttribute('aria-expanded', 'false');
+  };
+
   document.getElementById('btn-about').onclick = function () {
     playDetentClick(800, 0.02);
     const panel = document.getElementById('panel-about');
@@ -408,6 +615,8 @@ async function init() {
     document.getElementById('panel-about').hidden = true;
     document.getElementById('btn-about').setAttribute('aria-expanded', 'false');
   };
+
+  setupGlobalShortcuts();
 
   await selectTrack(state.trackIdx, false);
 }
