@@ -5,6 +5,7 @@ import { mapBandToEvents } from './mapping.js';
 import { AudioEngine } from './engine.js';
 import { FrameSequencer } from './sequencer.js';
 import { Narrator } from './narrator.js';
+import { playDetentClick, triggerHaptic } from './tactileAudio.js';
 import {
   buildStyleButtons,
   buildTrackShelf,
@@ -106,6 +107,9 @@ async function renderCurrentFrame() {
 }
 
 async function selectTrack(idx, autoPickStyle = false) {
+  playDetentClick(780 + idx * 40, 0.03);
+  triggerHaptic(6);
+
   state.trackIdx = idx;
   state.pos = 0;
   state.uploadedImage = null;
@@ -118,7 +122,7 @@ async function selectTrack(idx, autoPickStyle = false) {
   updateTrackShelfSelection(document.getElementById('track-shelf'), idx);
 
   document.getElementById('track-desc').textContent = track.description;
-  document.getElementById('track-why').textContent = track.whyItMatters ? `Why it matters: ${track.whyItMatters}` : '';
+  document.getElementById('track-why').textContent = track.whyItMatters ? `Scientific context: ${track.whyItMatters}` : '';
 
   const sliderWrap = document.getElementById('frame-slider-wrap');
   const rngFrame = document.getElementById('rng-frame');
@@ -179,9 +183,12 @@ function step(audioTime) {
 }
 
 async function setPlaying(shouldPlay) {
+  playDetentClick(shouldPlay ? 1040 : 540, 0.04);
+  triggerHaptic(8);
+
   state.playing = shouldPlay;
   const btn = document.getElementById('btn-play');
-  btn.textContent = shouldPlay ? '⏸ Pause' : '▶ Play';
+  btn.textContent = shouldPlay ? '⏸ Pause' : '▶ Power / Play';
   btn.setAttribute('aria-pressed', String(shouldPlay));
 
   if (shouldPlay) {
@@ -206,6 +213,82 @@ function syncHash() {
     speed: String(state.speed)
   });
   history.replaceState(null, '', `#${params.toString()}`);
+}
+
+function updateRotaryVisual(speedVal) {
+  const knob = document.getElementById('rotary-tuner');
+  if (!knob) return;
+  // Map speed 1-5 to angle -135deg to +135deg (270 degree rotation arc)
+  const angle = ((speedVal - 1) / 4) * 270 - 135;
+  knob.style.transform = `rotate(${angle}deg)`;
+  knob.setAttribute('aria-valuenow', String(speedVal));
+}
+
+function setupRotaryKnob() {
+  const knob = document.getElementById('rotary-tuner');
+  if (!knob) return;
+
+  let isDragging = false;
+  let startY = 0;
+  let startSpeed = state.speed;
+
+  const onPointerDown = (e) => {
+    isDragging = true;
+    startY = e.clientY;
+    startSpeed = state.speed;
+    knob.setPointerCapture(e.pointerId);
+  };
+
+  const onPointerMove = (e) => {
+    if (!isDragging) return;
+    const deltaY = startY - e.clientY;
+    const stepDelta = Math.round(deltaY / 22);
+    const newSpeed = Math.max(1, Math.min(5, startSpeed + stepDelta));
+    if (newSpeed !== state.speed) {
+      state.speed = newSpeed;
+      document.getElementById('rng-spd').value = String(newSpeed);
+      document.getElementById('lbl-spd').textContent = String(newSpeed);
+      updateRotaryVisual(newSpeed);
+      playDetentClick(600 + newSpeed * 80, 0.025);
+      triggerHaptic(4);
+      if (state.playing) {
+        engine.startScheduler(() => getStepIntervalMs() / 1000, step);
+      }
+      syncHash();
+    }
+  };
+
+  const onPointerUp = () => {
+    isDragging = false;
+  };
+
+  knob.onpointerdown = onPointerDown;
+  knob.onpointermove = onPointerMove;
+  knob.onpointerup = onPointerUp;
+  knob.onpointercancel = onPointerUp;
+
+  knob.onkeydown = (e) => {
+    let nextSpeed = state.speed;
+    if (e.key === 'ArrowUp' || e.key === 'ArrowRight') nextSpeed = Math.min(5, state.speed + 1);
+    else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') nextSpeed = Math.max(1, state.speed - 1);
+    else return;
+
+    e.preventDefault();
+    if (nextSpeed !== state.speed) {
+      state.speed = nextSpeed;
+      document.getElementById('rng-spd').value = String(nextSpeed);
+      document.getElementById('lbl-spd').textContent = String(nextSpeed);
+      updateRotaryVisual(nextSpeed);
+      playDetentClick(600 + nextSpeed * 80, 0.025);
+      triggerHaptic(4);
+      if (state.playing) {
+        engine.startScheduler(() => getStepIntervalMs() / 1000, step);
+      }
+      syncHash();
+    }
+  };
+
+  updateRotaryVisual(state.speed);
 }
 
 function applyHashState() {
@@ -237,23 +320,30 @@ async function init() {
 
   buildTrackShelf(document.getElementById('track-shelf'), state.tracks, (i) => selectTrack(i, false));
   buildStyleButtons(document.getElementById('style-buttons'), (styleId) => {
+    playDetentClick(880, 0.025);
+    triggerHaptic(4);
     state.selectedStyle = styleId;
     analyzeCurrentCanvas();
     syncHash();
   });
 
+  setupRotaryKnob();
+
   document.getElementById('btn-play').onclick = () => setPlaying(!state.playing);
   document.getElementById('btn-loop').onclick = function () {
+    playDetentClick(680, 0.02);
     state.loop = !state.loop;
     this.setAttribute('aria-pressed', String(state.loop));
     this.textContent = `Loop: ${state.loop ? 'On' : 'Off'}`;
   };
 
   document.getElementById('sel-scale').onchange = function () {
+    playDetentClick(740, 0.02);
     state.scaleId = this.value;
     syncHash();
   };
   document.getElementById('sel-scan').onchange = function () {
+    playDetentClick(820, 0.02);
     state.scanMode = this.value;
     state.pos = 0;
     analyzeCurrentCanvas();
@@ -261,6 +351,8 @@ async function init() {
   document.getElementById('rng-spd').oninput = function () {
     state.speed = Number(this.value);
     document.getElementById('lbl-spd').textContent = this.value;
+    updateRotaryVisual(state.speed);
+    playDetentClick(600 + state.speed * 80, 0.02);
     if (state.playing) {
       engine.startScheduler(() => getStepIntervalMs() / 1000, step);
     }
@@ -275,6 +367,7 @@ async function init() {
     state.pos = 0;
     document.getElementById('lbl-frame').textContent =
       `${sequencer.currentIndex + 1} / ${sequencer.getFrameCount()} (${sequencer.getCurrentLabel()})`;
+    playDetentClick(940, 0.02);
     renderCurrentFrame();
   };
 
@@ -293,21 +386,25 @@ async function init() {
   };
 
   document.getElementById('btn-hc').onclick = function () {
+    playDetentClick(1100, 0.03);
     const on = document.documentElement.classList.toggle('hc-mode');
     this.setAttribute('aria-pressed', String(on));
   };
   document.getElementById('btn-voice').onclick = function () {
+    playDetentClick(900, 0.03);
     const next = !narrator.enabled;
     narrator.setEnabled(next);
     this.setAttribute('aria-pressed', String(next));
     this.textContent = `Narration: ${next ? 'On' : 'Off'}`;
   };
   document.getElementById('btn-about').onclick = function () {
+    playDetentClick(800, 0.02);
     const panel = document.getElementById('panel-about');
     panel.hidden = !panel.hidden;
     this.setAttribute('aria-expanded', String(!panel.hidden));
   };
   document.getElementById('close-about').onclick = () => {
+    playDetentClick(600, 0.02);
     document.getElementById('panel-about').hidden = true;
     document.getElementById('btn-about').setAttribute('aria-expanded', 'false');
   };
