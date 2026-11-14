@@ -9,7 +9,10 @@ export function buildTrackShelf(container, tracks, onSelect) {
     btn.className = 'track-btn';
     btn.setAttribute('aria-selected', 'false');
     btn.innerHTML = `
-      <span class="track-top"><span>${track.icon} ${track.svsId}</span><span>${track.defaultStyle}</span></span>
+      <span class="track-top">
+        <span>${track.icon} ${track.svsId}</span>
+        <span class="track-badge">${track.defaultStyle}</span>
+      </span>
       <span class="track-name">${track.name}</span>
     `;
     btn.onclick = () => onSelect(idx);
