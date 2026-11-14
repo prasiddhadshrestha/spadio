@@ -1,0 +1,20 @@
+{
+  "name": "earth-jukebox",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Earth Jukebox: Real-time musical, blind-and-low-vision-first sonification of NASA Earth Information Center & SVS imagery.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "render": "node scripts/render_gallery.mjs"
+  },
+  "devDependencies": {
+    "jpeg-js": "^0.4.4",
+    "pngjs": "^7.0.0",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.0"
+  }
+}
