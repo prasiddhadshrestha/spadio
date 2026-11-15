@@ -192,6 +192,26 @@
             </div>
             <canvas id="strip" width="640" height="44" aria-hidden="true"></canvas>
           </div>
+
+          <!-- Real-Time Causal Sonification Probe HUD -->
+          <div id="probe-hud" class="probe-hud-bar" role="region" aria-label="Live Sonification Telemetry Probe">
+            <div class="probe-item">
+              <span class="probe-lbl">BAND INDEX</span>
+              <strong id="probe-band" class="probe-val">Band -- / 48</strong>
+            </div>
+            <div class="probe-item">
+              <span class="probe-lbl">LUMINANCE → GAIN</span>
+              <strong id="probe-luma" class="probe-val">--% (0.00 dB)</strong>
+            </div>
+            <div class="probe-item">
+              <span class="probe-lbl">Y-COORD → FREQ</span>
+              <strong id="probe-freq" class="probe-val">-- Hz (---)</strong>
+            </div>
+            <div class="probe-item">
+              <span class="probe-lbl">HUE → TIMBRE</span>
+              <strong id="probe-hue" class="probe-val">---° (Neutral)</strong>
+            </div>
+          </div>
         </div>
 
         <!-- Real-Time Screen Reader Accessible Live Caption -->

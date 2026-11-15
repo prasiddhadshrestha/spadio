@@ -166,6 +166,7 @@ function step(audioTime) {
 
   document.getElementById('band-readout').textContent = `Band ${idxPos + 1}/${BAND_COUNT}`;
   narrator.updateCaption(mapped.caption, stepMs);
+  updateProbeHUD(band, idxPos, mapped);
 
   state.pos++;
   if (state.pos >= BAND_COUNT) {
@@ -291,6 +292,100 @@ function setupRotaryKnob() {
   };
 
   updateRotaryVisual(state.speed);
+}
+
+function updateProbeHUD(band, bandIdx, mapped) {
+  if (!band) return;
+  const probeBand = document.getElementById('probe-band');
+  const probeLuma = document.getElementById('probe-luma');
+  const probeFreq = document.getElementById('probe-freq');
+  const probeHue = document.getElementById('probe-hue');
+
+  if (probeBand) {
+    probeBand.textContent = `Band ${bandIdx + 1} / ${BAND_COUNT}`;
+  }
+
+  if (probeLuma) {
+    const pct = Math.round(band.brightness * 100);
+    const gainVal = mapped?.events?.[0]?.gain ? (mapped.events[0].gain * 10).toFixed(2) : (band.brightness * 0.8).toFixed(2);
+    probeLuma.textContent = `${pct}% (Gain: ${gainVal})`;
+  }
+
+  if (probeFreq) {
+    if (mapped?.events && mapped.events.length > 0) {
+      const f = Math.round(mapped.events[0].freq);
+      probeFreq.textContent = `${f} Hz (${getNoteNameFromFreq(f)})`;
+    } else {
+      probeFreq.textContent = `Quiet / Muted`;
+    }
+  }
+
+  if (probeHue) {
+    const h = Math.round(band.hue || 0);
+    let colorName = 'Achromatic';
+    if (band.coloredFraction > 0.05) {
+      if (h < 30 || h >= 330) colorName = 'Warm Red';
+      else if (h < 70) colorName = 'Amber / Yellow';
+      else if (h < 160) colorName = 'Forest Green';
+      else if (h < 260) colorName = 'Cyan / Ocean Blue';
+      else colorName = 'Violet / Magenta';
+    }
+    probeHue.textContent = `${h}° (${colorName})`;
+  }
+}
+
+function getNoteNameFromFreq(freq) {
+  if (!freq || freq < 20) return '---';
+  const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+  const midi = Math.round(12 * (Math.log2(freq / 440)) + 69);
+  const noteName = notes[midi % 12];
+  const octave = Math.floor(midi / 12) - 1;
+  return `${noteName}${octave}`;
+}
+
+function setupProbeHover() {
+  const strip = document.getElementById('strip');
+  if (!strip) return;
+
+  strip.addEventListener('mousemove', (e) => {
+    if (!state.analysis || !state.analysis.bands) return;
+    const rect = strip.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const fraction = Math.max(0, Math.min(0.999, x / rect.width));
+    const bandIdx = Math.floor(fraction * BAND_COUNT);
+    const band = state.analysis.bands[bandIdx];
+    if (band) {
+      const mapped = mapBandToEvents(band, {
+        style: state.resolvedStyle,
+        scaleId: state.scaleId,
+        maxBrightness: state.analysis.maxBrightness,
+        bandCount: BAND_COUNT,
+        bandIndex: bandIdx
+      });
+      updateProbeHUD(band, bandIdx, mapped);
+    }
+  });
+
+  strip.addEventListener('click', (e) => {
+    if (!state.analysis || !state.analysis.bands) return;
+    const rect = strip.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const fraction = Math.max(0, Math.min(0.999, x / rect.width));
+    const bandIdx = Math.floor(fraction * BAND_COUNT);
+    const band = state.analysis.bands[bandIdx];
+    if (band) {
+      const mapped = mapBandToEvents(band, {
+        style: state.resolvedStyle,
+        scaleId: state.scaleId,
+        maxBrightness: state.analysis.maxBrightness,
+        bandCount: BAND_COUNT,
+        bandIndex: bandIdx
+      });
+      engine.scheduleEvents(mapped.events);
+      playDetentClick(880, 0.02);
+      updateProbeHUD(band, bandIdx, mapped);
+    }
+  });
 }
 
 function handleVoiceCommand(cmd) {
@@ -617,6 +712,7 @@ async function init() {
   };
 
   setupGlobalShortcuts();
+  setupProbeHover();
 
   await selectTrack(state.trackIdx, false);
 }

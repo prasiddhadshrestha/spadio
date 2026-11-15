@@ -650,6 +650,59 @@ a:hover {
   height: 38px;
   border-radius: 6px;
   background: #020617;
+  cursor: crosshair;
+}
+
+/* Real-Time Sonification Probe HUD */
+.probe-hud-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  background: #0d121c;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+@media (max-width: 640px) {
+  .probe-hud-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.probe-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.probe-lbl {
+  font-size: 9px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.1em;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.probe-val {
+  font-size: 11px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: #38bdf8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hc-mode .probe-hud-bar {
+  background: #141414 !important;
+  border: 1px solid #ffea00 !important;
+}
+
+.hc-mode .probe-lbl {
+  color: #cccccc !important;
+}
+
+.hc-mode .probe-val {
+  color: #ffea00 !important;
 }
 
 /* Live Caption & Accessibility Terminal */
