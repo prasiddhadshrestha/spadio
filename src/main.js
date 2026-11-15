@@ -7,6 +7,9 @@ import { FrameSequencer } from './sequencer.js';
 import { Narrator } from './narrator.js';
 import { playDetentClick, triggerHaptic } from './tactileAudio.js';
 import { VoiceController } from './voice.js';
+import { EarthGlobe } from './globe.js';
+import { CLIMATE_DATA, HOTSPOTS, getYearsList } from './climateData.js';
+import { ClimateSynthesizer } from './climateAudio.js';
 import {
   buildStyleButtons,
   buildTrackShelf,
@@ -27,6 +30,13 @@ const engine = new AudioEngine();
 const sequencer = new FrameSequencer();
 const narrator = new Narrator(document.getElementById('live-cap'));
 let voiceCtrl = null;
+
+let currentChannel = 'ch2';
+let globeInstance = null;
+const climateSynth = new ClimateSynthesizer();
+let currentYear = 2026;
+let climateDroneActive = false;
+let selectedHotspot = HOTSPOTS[0];
 
 const state = {
   tracks: [],
@@ -388,11 +398,217 @@ function setupProbeHover() {
   });
 }
 
+function switchChannel(channelId) {
+  if (currentChannel === channelId && document.getElementById(channelId === 'ch1' ? 'ch1-deck' : 'ch2-deck').hidden === false) return;
+  playDetentClick(620, 0.04);
+  triggerHaptic(8);
+  currentChannel = channelId;
+
+  const tabCh1 = document.getElementById('tab-ch1');
+  const tabCh2 = document.getElementById('tab-ch2');
+  const ch1Deck = document.getElementById('ch1-deck');
+  const ch2Deck = document.getElementById('ch2-deck');
+
+  if (channelId === 'ch1') {
+    tabCh1.classList.add('active');
+    tabCh1.setAttribute('aria-selected', 'true');
+    tabCh2.classList.remove('active');
+    tabCh2.setAttribute('aria-selected', 'false');
+
+    ch1Deck.hidden = false;
+    ch2Deck.hidden = true;
+
+    if (state.playing) {
+      setPlaying(false);
+    }
+
+    if (!globeInstance) {
+      const globeWrap = document.getElementById('globe-canvas-wrap');
+      globeInstance = new EarthGlobe(globeWrap, (spot) => selectHotspot(spot));
+      initCh1UI();
+    }
+    updateClimateDisplay(currentYear);
+    narrator.speak('Channel 1: 3D Climate Orbit and Time Machine. Drag the year slider from 1980 to 2026.');
+  } else {
+    tabCh2.classList.add('active');
+    tabCh2.setAttribute('aria-selected', 'true');
+    tabCh1.classList.remove('active');
+    tabCh1.setAttribute('aria-selected', 'false');
+
+    ch2Deck.hidden = false;
+    ch1Deck.hidden = true;
+
+    climateSynth.stop();
+    const btnDrone = document.getElementById('btn-drone');
+    if (btnDrone) {
+      btnDrone.textContent = '🔊 Thermal Drone: Off';
+      btnDrone.setAttribute('aria-pressed', 'false');
+      climateDroneActive = false;
+    }
+
+    narrator.speak('Channel 2: Satellite Sound Lab. Press Power to sonify NASA imagery.');
+  }
+}
+
+function initCh1UI() {
+  const shelf = document.getElementById('hotspot-btn-shelf');
+  if (shelf) {
+    shelf.innerHTML = '';
+    HOTSPOTS.forEach((spot, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = `neu-btn ${i === 0 ? 'active' : ''}`;
+      btn.style.fontSize = '12px';
+      btn.style.padding = '5px 10px';
+      btn.textContent = spot.name;
+      btn.addEventListener('click', () => {
+        selectHotspot(spot);
+      });
+      shelf.appendChild(btn);
+    });
+  }
+
+  const rngYear = document.getElementById('rng-year');
+  if (rngYear) {
+    rngYear.addEventListener('input', (e) => {
+      setYear(parseInt(e.target.value, 10));
+    });
+  }
+
+  document.querySelectorAll('.btn-milestone').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const yr = parseInt(btn.dataset.year, 10);
+      setYear(yr);
+    });
+  });
+
+  const btnDrone = document.getElementById('btn-drone');
+  if (btnDrone) {
+    btnDrone.addEventListener('click', () => {
+      climateDroneActive = !climateDroneActive;
+      btnDrone.textContent = climateDroneActive ? '🔊 Thermal Drone: On' : '🔊 Thermal Drone: Off';
+      btnDrone.setAttribute('aria-pressed', String(climateDroneActive));
+      playDetentClick(climateDroneActive ? 880 : 440, 0.03);
+      triggerHaptic(6);
+      climateSynth.setMuted(!climateDroneActive);
+      if (climateDroneActive) {
+        const data = getClosestClimateData(currentYear);
+        climateSynth.updateAnomaly(data.tempAnomaly);
+      }
+    });
+  }
+
+  selectHotspot(HOTSPOTS[0]);
+}
+
+function getClosestClimateData(year) {
+  const years = getYearsList();
+  if (CLIMATE_DATA[year]) return CLIMATE_DATA[year];
+  let closest = years[0];
+  let minDiff = Math.abs(year - closest);
+  for (const y of years) {
+    const diff = Math.abs(year - y);
+    if (diff < minDiff) {
+      minDiff = diff;
+      closest = y;
+    }
+  }
+  return CLIMATE_DATA[closest];
+}
+
+function setYear(year) {
+  currentYear = year;
+  const rngYear = document.getElementById('rng-year');
+  const lblYear = document.getElementById('lbl-year');
+  const badge = document.getElementById('ch1-year-badge');
+  if (rngYear) rngYear.value = String(year);
+  if (lblYear) lblYear.textContent = String(year);
+  if (badge) badge.textContent = `Year ${year}`;
+
+  document.querySelectorAll('.btn-milestone').forEach(btn => {
+    btn.classList.toggle('active', parseInt(btn.dataset.year, 10) === year);
+  });
+
+  playDetentClick(700 + ((year - 1980) * 12), 0.02);
+  triggerHaptic(4);
+  updateClimateDisplay(year);
+}
+
+function updateClimateDisplay(year) {
+  const data = getClosestClimateData(year);
+  const ch1Temp = document.getElementById('ch1-temp');
+  const ch1Co2 = document.getElementById('ch1-co2');
+  const ch1Ice = document.getElementById('ch1-ice');
+  const ch1Era = document.getElementById('ch1-era-title');
+  const ch1Summary = document.getElementById('ch1-summary');
+  const ch1Everyday = document.getElementById('ch1-everyday');
+  const ch1LiveCap = document.getElementById('ch1-live-cap');
+
+  if (ch1Temp) {
+    ch1Temp.textContent = `+${data.tempAnomaly.toFixed(2)}°C`;
+    if (data.tempAnomaly < 0.4) {
+      ch1Temp.style.color = '#10b981';
+    } else if (data.tempAnomaly < 0.8) {
+      ch1Temp.style.color = '#eab308';
+    } else if (data.tempAnomaly < 1.2) {
+      ch1Temp.style.color = '#f97316';
+    } else {
+      ch1Temp.style.color = '#ef4444';
+    }
+  }
+
+  if (ch1Co2) ch1Co2.textContent = `${data.co2Ppm.toFixed(1)} ppm`;
+  if (ch1Ice) ch1Ice.textContent = `${data.arcticIceMkm2.toFixed(2)} M km²`;
+  if (ch1Era) ch1Era.textContent = data.eraTitle;
+  if (ch1Summary) ch1Summary.textContent = data.summary;
+  if (ch1Everyday) ch1Everyday.textContent = data.everydayImpact;
+
+  if (ch1LiveCap) {
+    ch1LiveCap.textContent = `Year ${year}: Temperature anomaly +${data.tempAnomaly.toFixed(2)}°C, Atmospheric CO2 ${data.co2Ppm.toFixed(1)} ppm, Arctic Sea Ice minimum ${data.arcticIceMkm2.toFixed(2)} million km². ${data.summary}`;
+  }
+
+  if (globeInstance) {
+    globeInstance.updateThermalOverlay(data.tempAnomaly);
+  }
+
+  if (climateDroneActive) {
+    climateSynth.updateAnomaly(data.tempAnomaly);
+  }
+}
+
+function selectHotspot(spot) {
+  selectedHotspot = spot;
+  playDetentClick(720, 0.03);
+  triggerHaptic(5);
+
+  const nameEl = document.getElementById('hotspot-name');
+  const mechEl = document.getElementById('hotspot-mechanism');
+  const metricEl = document.getElementById('hotspot-metric');
+  const detailEl = document.getElementById('hotspot-detail');
+
+  if (nameEl) nameEl.textContent = spot.name;
+  if (mechEl) mechEl.textContent = spot.mechanism;
+  if (metricEl) metricEl.textContent = spot.metric;
+  if (detailEl) detailEl.textContent = spot.detail;
+
+  const shelf = document.getElementById('hotspot-btn-shelf');
+  if (shelf) {
+    Array.from(shelf.children).forEach(b => {
+      b.classList.toggle('active', b.textContent === spot.name);
+    });
+  }
+
+  narrator.speak(`${spot.name}. ${spot.mechanism}. ${spot.detail}`);
+}
+
 function handleVoiceCommand(cmd) {
   if (!cmd) return;
   playDetentClick(1020, 0.035);
 
   switch (cmd.type) {
+    case 'set_channel':
+      switchChannel(cmd.value);
+      break;
     case 'play':
       setPlaying(true);
       break;
@@ -497,7 +713,13 @@ function setupGlobalShortcuts() {
     // Skip if typing in an input or select
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
 
-    if (e.code === 'Space') {
+    if (e.key === 'c' || e.key === 'C') {
+      e.preventDefault();
+      switchChannel(currentChannel === 'ch1' ? 'ch2' : 'ch1');
+    } else if (currentChannel === 'ch1' && (e.key === '1' || e.key === '2')) {
+      e.preventDefault();
+      switchChannel(e.key === '1' ? 'ch1' : 'ch2');
+    } else if (e.code === 'Space') {
       e.preventDefault();
       setPlaying(!state.playing);
     } else if (e.key === 'v' || e.key === 'V') {
@@ -710,6 +932,12 @@ async function init() {
     document.getElementById('panel-about').hidden = true;
     document.getElementById('btn-about').setAttribute('aria-expanded', 'false');
   };
+
+  // Channel Tab Switching
+  const tabCh1 = document.getElementById('tab-ch1');
+  const tabCh2 = document.getElementById('tab-ch2');
+  if (tabCh1) tabCh1.onclick = () => switchChannel('ch1');
+  if (tabCh2) tabCh2.onclick = () => switchChannel('ch2');
 
   setupGlobalShortcuts();
   setupProbeHover();
