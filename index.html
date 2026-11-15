@@ -22,10 +22,8 @@
       </div>
       <div class="radio-actions" role="toolbar" aria-label="Accessibility and display tools">
         <a href="/live-earth/index.html" class="neu-btn" style="text-decoration: none; color: #38bdf8; font-weight: 700; border: 1.5px solid rgba(56, 189, 248, 0.45); display: inline-flex; align-items: center; gap: 6px;">
-          🛰️ Switch to Live Earth (Aoi) &rarr;
+          🛰️ Live Earth &rarr;
         </a>
-        <button id="btn-voice-cmd" type="button" aria-pressed="false" class="neu-btn">🎙️ Voice: Off</button>
-        <button id="btn-voice" type="button" aria-pressed="false" class="neu-btn">Narration: Off</button>
         <button id="btn-hc" type="button" aria-pressed="false" class="neu-btn">High Contrast</button>
         <button id="btn-shortcuts" type="button" aria-expanded="false" class="neu-btn">Shortcuts [?]</button>
         <button id="btn-about" type="button" aria-expanded="false" class="neu-btn">Scientific Proof</button>
@@ -49,35 +47,19 @@
     <!-- Collapsible Shortcuts Help Panel -->
     <section id="panel-shortcuts" hidden class="neu-panel" aria-labelledby="shortcuts-heading">
       <div class="panel-title-bar">
-        <h2 id="shortcuts-heading">Keyboard Shortcuts & Voice Commands</h2>
+        <h2 id="shortcuts-heading">Keyboard Shortcuts</h2>
         <button id="close-shortcuts" type="button" class="neu-btn">Close</button>
       </div>
-      <div class="shortcuts-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 13px;">
-        <div>
-          <h3 style="margin: 0 0 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent);">Keyboard Hotkeys</h3>
-          <ul style="padding-left: 18px; margin: 0; display: flex; flex-direction: column; gap: 6px;">
-            <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">Space</kbd> : Power / Play / Pause audio</li>
-            <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">V</kbd> : Toggle Hands-Free Voice Commands</li>
-            <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">N</kbd> : Toggle Spoken Narration</li>
-            <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">H</kbd> : Toggle High Contrast Mode (WCAG AAA)</li>
-            <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">L</kbd> : Toggle Loop On / Off</li>
-            <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">1 - 5</kbd> : Set Scan Speed Velocity (1 to 5)</li>
-            <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">↑ / ↓</kbd> : Adjust Acoustic Output Volume</li>
-            <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">?</kbd> : Toggle this help menu</li>
-          </ul>
-        </div>
-        <div>
-          <h3 style="margin: 0 0 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent);">Spoken Voice Commands</h3>
-          <ul style="padding-left: 18px; margin: 0; display: flex; flex-direction: column; gap: 6px;">
-            <li><em>"play"</em>, <em>"pause"</em>, <em>"stop"</em> : Master transport</li>
-            <li><em>"next"</em>, <em>"previous"</em> : Navigate radio stations</li>
-            <li><em>"aurora"</em>, <em>"night lights"</em>, <em>"aerosol"</em>, <em>"river"</em> : Jump to track</li>
-            <li><em>"minor"</em>, <em>"pentatonic"</em>, <em>"whole tone"</em> : Change musical scale</li>
-            <li><em>"radar"</em>, <em>"horizontal"</em>, <em>"vertical"</em>, <em>"radial"</em> : Change scan vector</li>
-            <li><em>"faster"</em>, <em>"slower"</em>, <em>"speed 3"</em> : Dynamic tempo adjustment</li>
-            <li><em>"high contrast"</em> : Toggle WCAG AAA accessibility</li>
-          </ul>
-        </div>
+      <div class="shortcuts-grid" style="font-size: 13px;">
+        <ul style="padding-left: 18px; margin: 0; display: flex; flex-direction: column; gap: 6px;">
+          <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">Space</kbd> : Power / Play / Pause audio</li>
+          <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">[ / ]</kbd> : Previous / Next NASA SVS Track</li>
+          <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">H</kbd> : Toggle High Contrast Mode (WCAG AAA)</li>
+          <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">L</kbd> : Toggle Loop On / Off</li>
+          <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">1 - 5</kbd> : Select Sound Style (Sparkle, Flow, Layers, Field, Duet)</li>
+          <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">↑ / ↓</kbd> : Adjust Acoustic Output Volume</li>
+          <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">?</kbd> : Toggle this help menu</li>
+        </ul>
       </div>
     </section>
 
