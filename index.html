@@ -20,10 +20,24 @@
           <span class="brand-freq">FM 88.1 - 108.0 MHz · NASA EIC SATELLITE SONIFICATION</span>
         </div>
       </div>
-      <div class="radio-actions" role="toolbar" aria-label="Accessibility and display tools">
-        <a href="/live-earth/index.html" class="neu-btn" style="text-decoration: none; color: #38bdf8; font-weight: 700; border: 1.5px solid rgba(56, 189, 248, 0.45); display: inline-flex; align-items: center; gap: 6px;">
-          🛰️ Live Earth &rarr;
+
+      <!-- Prominent Dual-Perspective Segmented Switcher -->
+      <nav class="perspective-switcher" aria-label="Scientific Viewport Mode">
+        <div class="perspective-tab active" title="Current View: 2D SVS Laboratory Spectrometer">
+          <span class="pulse-indicator active"></span>
+          <span class="tab-icon">📻</span>
+          <span class="tab-title">2D SVS Console</span>
+          <span class="tab-badge">Active</span>
+        </div>
+        <a href="/live-earth/index.html" class="perspective-tab link" title="Click to launch 3D Planetary Orbit & Live Precipitation">
+          <span class="pulse-indicator live-cyan"></span>
+          <span class="tab-icon">🛰️</span>
+          <span class="tab-title">3D Live Earth</span>
+          <span class="tab-badge-cyan">Orbit View ↗</span>
         </a>
+      </nav>
+
+      <div class="radio-actions" role="toolbar" aria-label="Accessibility and display tools">
         <button id="btn-voice" type="button" aria-pressed="false" class="neu-btn">Narration: Off</button>
         <button id="btn-hc" type="button" aria-pressed="false" class="neu-btn">High Contrast</button>
         <button id="btn-shortcuts" type="button" aria-expanded="false" class="neu-btn">Shortcuts [?]</button>

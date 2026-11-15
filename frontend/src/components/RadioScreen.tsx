@@ -305,15 +305,31 @@ export const RadioScreen: React.FC<RadioScreenProps> = ({
               </span>
             </div>
 
-            {/* View Switch Button and 2D SVS Console Return Link */}
-            <div className="flex items-center gap-2 pointer-events-auto">
-              <a
-                href="/"
-                className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10.5px] font-mono font-bold tracking-wider text-cyan-400 bg-[#0a0d14]/90 backdrop-blur-md border border-cyan-400/30 hover:border-cyan-400 hover:text-white transition-all shadow-xl"
-                title="Return to 2D SVS Console"
-              >
-                📻 2D SVS Console &rarr;
-              </a>
+            {/* Prominent Dual-Perspective Segmented Switcher & 3D/2D View Mode */}
+            <div className="flex items-center gap-3 pointer-events-auto">
+              <nav className="flex items-center gap-1.5 p-1 rounded-full bg-[#0a0d14]/92 backdrop-blur-md border border-white/[0.18] shadow-2xl">
+                <a
+                  href="/"
+                  className="group flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-bold tracking-wider text-cyan-400 hover:text-white hover:bg-cyan-500/20 border border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_12px_rgba(6,182,212,0.2)] hover:shadow-[0_0_18px_rgba(6,182,212,0.5)] active:scale-95"
+                  title="Switch to 2D SVS Laboratory Console"
+                >
+                  <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee] animate-pulse" />
+                  <span>📻 2D SVS Console</span>
+                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-cyan-500/25 text-cyan-200 border border-cyan-400/30 uppercase">
+                    Spectrometer ↗
+                  </span>
+                </a>
+
+                <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#161c28] border border-white/10 text-white shadow-inner">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
+                  <span className="text-[11px] font-mono font-bold tracking-wider text-slate-100">
+                    🛰️ 3D Live Earth
+                  </span>
+                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 uppercase">
+                    Active
+                  </span>
+                </div>
+              </nav>
 
               <div className="flex items-center bg-[#0a0d14]/90 backdrop-blur-md p-1 rounded-full border border-white/[0.15] shadow-xl">
                 <button
