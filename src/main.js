@@ -406,6 +406,15 @@ function setupGlobalShortcuts() {
     } else if (e.key === ']' || e.key === '}') {
       e.preventDefault();
       selectTrack((state.trackIdx + 1) % state.tracks.length, false);
+    } else if (e.key === 'n' || e.key === 'N') {
+      e.preventDefault();
+      const next = !narrator.enabled;
+      narrator.setEnabled(next);
+      const vBtn = document.getElementById('btn-voice');
+      if (vBtn) {
+        vBtn.setAttribute('aria-pressed', String(next));
+        vBtn.textContent = `Narration: ${next ? 'On' : 'Off'}`;
+      }
     } else if (e.key === 'h' || e.key === 'H') {
       e.preventDefault();
       toggleHighContrast();
@@ -548,6 +557,13 @@ async function init() {
   };
 
   document.getElementById('btn-hc').onclick = toggleHighContrast;
+  document.getElementById('btn-voice').onclick = function () {
+    playDetentClick(900, 0.03);
+    const next = !narrator.enabled;
+    narrator.setEnabled(next);
+    this.setAttribute('aria-pressed', String(next));
+    this.textContent = `Narration: ${next ? 'On' : 'Off'}`;
+  };
 
   // Shortcuts panel
   document.getElementById('btn-shortcuts').onclick = function () {
