@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui,
+      'Segoe UI', Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #e2e5ec;
+    color: #1e2430;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Retro Neumorphism Hardware Surfaces */
+.neu-surface {
+  background-color: #e2e5ec;
+}
+
+.neu-raised {
+  background: linear-gradient(145deg, #eaedf3, #d8dce4);
+  box-shadow:
+    6px 6px 14px rgba(160, 169, 185, 0.68),
+    -6px -6px 14px rgba(255, 255, 255, 0.92);
+}
+
+.neu-raised-sm {
+  background: linear-gradient(145deg, #eaedf3, #d9dde5);
+  box-shadow:
+    4px 4px 9px rgba(160, 169, 185, 0.62),
+    -4px -4px 9px rgba(255, 255, 255, 0.9);
+}
+
+.neu-inset {
+  background: #dde1e8;
+  box-shadow:
+    inset 4px 4px 9px rgba(158, 167, 184, 0.68),
+    inset -4px -4px 9px rgba(255, 255, 255, 0.92);
+}
+
+.neu-glass-bezel {
+  background: #080a0f;
+  box-shadow:
+    inset 0 4px 16px rgba(0, 0, 0, 0.95),
+    3px 3px 8px rgba(158, 167, 184, 0.55),
+    -3px -3px 8px rgba(255, 255, 255, 0.9);
+}
+
+/* Live Equalizer Bars for Now Playing Track */
+@keyframes eqBounce1 {
+  0%, 100% { height: 4px; }
+  50% { height: 13px; }
+}
+
+@keyframes eqBounce2 {
+  0%, 100% { height: 11px; }
+  45% { height: 4px; }
+  80% { height: 14px; }
+}
+
+@keyframes eqBounce3 {
+  0%, 100% { height: 6px; }
+  35% { height: 12px; }
+  70% { height: 4px; }
+}
+
+.eq-bar-1 {
+  animation: eqBounce1 0.85s ease-in-out infinite;
+}
+
+.eq-bar-2 {
+  animation: eqBounce2 0.72s ease-in-out infinite;
+}
+
+.eq-bar-3 {
+  animation: eqBounce3 0.95s ease-in-out infinite;
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(30, 36, 48, 0.16);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(30, 36, 48, 0.3);
+}
+
+/* 3D Earth Skeleton UI Animations */
+@keyframes earthSkeletonShimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-skeleton-shimmer {
+  animation: earthSkeletonShimmer 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes skeletonPulseGlow {
+  0%, 100% {
+    opacity: 0.85;
+    box-shadow: 0 0 25px rgba(34, 211, 238, 0.12), inset 0 0 35px rgba(0, 0, 0, 0.85);
+  }
+  50% {
+    opacity: 0.45;
+    box-shadow: 0 0 45px rgba(34, 211, 238, 0.22), inset 0 0 45px rgba(0, 0, 0, 0.95);
+  }
+}
+
+.animate-skeleton-pulse {
+  animation: skeletonPulseGlow 3s ease-in-out infinite;
+}
+
+@keyframes skeletonRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-skeleton-spin {
+  animation: skeletonRotate 12s linear infinite;
+}
+
