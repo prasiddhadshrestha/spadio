@@ -3,7 +3,6 @@ import { Play, Square, SkipBack, SkipForward, Radio as RadioIcon, Globe, Scan } 
 import * as THREE from 'three';
 import { AudioSpectrum } from './AudioSpectrum';
 import { VolumeDial } from './VolumeDial';
-import { YearTuner } from './YearTuner';
 import { PlaylistPanel, PlaylistRegionItem, TRACK_METADATA } from './PlaylistPanel';
 import { PlanetScene } from './PlanetScene';
 import { ImageSonificationView2D } from './ImageSonificationView2D';
@@ -35,8 +34,6 @@ export interface RadioScreenProps {
   distressScore: number;
   pitchHz: number;
   pulseBpm: number;
-  year: number;
-  onYearChange: (year: number) => void;
   autoSweep: boolean;
   onToggleAutoSweep: () => void;
 
@@ -85,8 +82,6 @@ export const RadioScreen: React.FC<RadioScreenProps> = ({
   distressScore,
   pitchHz,
   pulseBpm,
-  year,
-  onYearChange,
   autoSweep,
   onToggleAutoSweep,
   currentBandIndex,
@@ -153,49 +148,10 @@ export const RadioScreen: React.FC<RadioScreenProps> = ({
       {/* 50 / 50 Split: Left Radio Deck + Right 3D Earth Sonification Window */}
       <div className="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
         {/* LEFT 1/2: Retro Neumorphic Radio Control Deck */}
-        <section className="h-full flex flex-col justify-between gap-2.5 md:overflow-y-auto pr-0.5">
-          {/* Header */}
-          <header className="flex items-center justify-between gap-3 px-1">
-            <div className="flex items-center gap-2">
-              <Globe className="w-4 h-4 text-[#ff5a1f]" />
-              <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#1e2430]">
-                Earth Jukebox
-              </span>
-              <span className="text-[10px] font-mono text-[#646c7a] px-1.5 py-0.5 rounded neu-inset">
-                NASA EIC DSP
-              </span>
-            </div>
-
-            {/* Instant On-Air / Now Playing Pill */}
-            <div className="flex items-center gap-2">
-              <a
-                href="/"
-                className="text-[10px] font-mono font-semibold px-2.5 py-1 rounded-full bg-[#1e2430] text-sky-400 hover:text-white transition-colors flex items-center gap-1 shadow-sm"
-                title="Switch to 2D NASA SVS Precision Sonification Console"
-              >
-                📻 2D SVS Console &rarr;
-              </a>
-              <div className="flex items-center gap-2 bg-[#12151c] text-slate-100 px-3 py-1.5 rounded-full shadow-[inset_0_1px_4px_rgba(0,0,0,0.85),2px_2px_6px_rgba(160,169,185,0.5)]">
-              <span
-                className={`w-2 h-2 rounded-full ${
-                  isPlaying
-                    ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.9)] animate-pulse'
-                    : 'bg-amber-300/80'
-                }`}
-              />
-              <span className="text-[9.5px] font-mono uppercase tracking-widest text-slate-400">
-                {isPlaying ? 'On Air' : 'Standby'}
-              </span>
-              <span className="text-slate-600">·</span>
-              <span className="text-[11px] font-semibold text-white max-w-[130px] truncate">
-                {activeSongTitle}
-              </span>
-            </div>
-          </div>
-        </header>
+        <section className="h-full flex flex-col justify-between gap-3 sm:gap-3.5 md:overflow-y-auto pr-0.5">
 
           {/* 1. Audio Spectrum Meter */}
-          <div className="h-[120px] sm:h-[130px] flex-shrink-0">
+          <div className="flex-1 min-h-[125px] max-h-[160px]">
             <AudioSpectrum
               engine={sonificationEngine}
               isPlaying={isPlaying}
@@ -205,19 +161,7 @@ export const RadioScreen: React.FC<RadioScreenProps> = ({
             />
           </div>
 
-          {/* 2. Planetary Meridian / Year Tuning Meter */}
-          <div className="flex-shrink-0">
-            <YearTuner
-              year={year}
-              onYearChange={onYearChange}
-              isPlaying={isPlaying}
-              autoSweep={autoSweep}
-              onToggleAutoSweep={onToggleAutoSweep}
-              metricDisplay={`MERIDIAN ${currentBandIndex + 1}/48 (${meridianLabel})`}
-            />
-          </div>
-
-          {/* 3. Image Sonification DSP Controls */}
+          {/* 2. Sound Engine & Image Sonification DSP Controls */}
           <div className="flex-shrink-0">
             <SonificationControls
               selectedStyle={selectedStyle}
@@ -233,12 +177,11 @@ export const RadioScreen: React.FC<RadioScreenProps> = ({
               isCustomLoaded={isCustomLoaded}
               customImageName={customImageName}
               currentCaption={currentCaption}
-              onInstantSonify={onInstantSonify}
-              onSonifyCurrentLine={onSonifyCurrentLine}
+              currentBandIndex={currentBandIndex}
             />
           </div>
 
-          {/* 4. Playlist Cards */}
+          {/* 3. Playlist Cards */}
           <div className="flex-shrink-0">
             <PlaylistPanel
               regions={regions}
@@ -246,11 +189,14 @@ export const RadioScreen: React.FC<RadioScreenProps> = ({
               onSelectRegion={onSelectRegion}
               isPlaying={isPlaying}
               activeMetricLabel={activeMetricLabel}
+              onUploadImage={onUploadImage}
+              isCustomLoaded={isCustomLoaded}
+              customImageName={customImageName}
             />
           </div>
 
-          {/* 5. Volume Dial + Transport Buttons */}
-          <div className="flex items-center justify-between gap-3 px-4 py-2 rounded-2xl neu-raised flex-shrink-0">
+          {/* 4. Volume Dial + Transport Buttons */}
+          <div className="flex items-center justify-between gap-3 px-4 py-2.5 sm:py-3 rounded-2xl neu-raised flex-shrink-0">
             <VolumeDial
               volume={volume}
               onVolumeChange={onVolumeChange}
@@ -359,37 +305,47 @@ export const RadioScreen: React.FC<RadioScreenProps> = ({
               </span>
             </div>
 
-            {/* View Switch Button: Placed in the exact position of DUET text (DUET removed) */}
-            <div className="pointer-events-auto flex items-center bg-[#0a0d14]/90 backdrop-blur-md p-1 rounded-full border border-white/[0.15] shadow-xl">
-              <button
-                type="button"
-                onClick={() => setViewMode('3d')}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[10.5px] font-mono font-bold tracking-wider transition-all active:scale-95 ${
-                  viewMode === '3d'
-                    ? 'bg-gradient-to-r from-cyan-500/25 to-blue-500/25 text-cyan-300 border border-cyan-400/50 shadow-[0_0_12px_rgba(34,211,238,0.35)]'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.05]'
-                }`}
-                title="Switch to 3D Earth Globe view"
-                aria-label="Switch to 3D Earth Globe view"
+            {/* View Switch Button and 2D SVS Console Return Link */}
+            <div className="flex items-center gap-2 pointer-events-auto">
+              <a
+                href="/"
+                className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10.5px] font-mono font-bold tracking-wider text-cyan-400 bg-[#0a0d14]/90 backdrop-blur-md border border-cyan-400/30 hover:border-cyan-400 hover:text-white transition-all shadow-xl"
+                title="Return to 2D SVS Console"
               >
-                <Globe className="w-3.5 h-3.5" />
-                <span>3D</span>
-              </button>
+                📻 2D SVS Console &rarr;
+              </a>
 
-              <button
-                type="button"
-                onClick={() => setViewMode('2d')}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[10.5px] font-mono font-bold tracking-wider transition-all active:scale-95 ${
-                  viewMode === '2d'
-                    ? 'bg-gradient-to-r from-amber-500/25 to-orange-500/25 text-amber-300 border border-amber-400/50 shadow-[0_0_12px_rgba(245,158,11,0.35)]'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.05]'
-                }`}
-                title="Switch to 2D Image Sonification view"
-                aria-label="Switch to 2D Image Sonification view"
-              >
-                <Scan className="w-3.5 h-3.5" />
-                <span>2D</span>
-              </button>
+              <div className="flex items-center bg-[#0a0d14]/90 backdrop-blur-md p-1 rounded-full border border-white/[0.15] shadow-xl">
+                <button
+                  type="button"
+                  onClick={() => setViewMode('3d')}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[10.5px] font-mono font-bold tracking-wider transition-all active:scale-95 ${
+                    viewMode === '3d'
+                      ? 'bg-gradient-to-r from-cyan-500/25 to-blue-500/25 text-cyan-300 border border-cyan-400/50 shadow-[0_0_12px_rgba(34,211,238,0.35)]'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.05]'
+                  }`}
+                  title="Switch to 3D Earth Globe view"
+                  aria-label="Switch to 3D Earth Globe view"
+                >
+                  <Globe className="w-3.5 h-3.5" />
+                  <span>3D</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setViewMode('2d')}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[10.5px] font-mono font-bold tracking-wider transition-all active:scale-95 ${
+                    viewMode === '2d'
+                      ? 'bg-gradient-to-r from-amber-500/25 to-orange-500/25 text-amber-300 border border-amber-400/50 shadow-[0_0_12px_rgba(245,158,11,0.35)]'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.05]'
+                  }`}
+                  title="Switch to 2D Image Sonification view"
+                  aria-label="Switch to 2D Image Sonification view"
+                >
+                  <Scan className="w-3.5 h-3.5" />
+                  <span>2D</span>
+                </button>
+              </div>
             </div>
           </div>
 

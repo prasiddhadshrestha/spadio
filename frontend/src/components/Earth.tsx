@@ -115,38 +115,34 @@ function SonificationScanLine({
 }
 
 export const Earth: React.FC<EarthProps> = ({
-  textureUrl = '/textures/aurora_globe.jpg',
+  textureUrl = '/textures/sea_surface_temperature.png',
   customTexture = null,
   currentBandIndex = 0,
   isPlaying = false,
-  activeStyle = 'duet',
+  activeStyle = 'flow',
 }) => {
   const earthGroupRef = useRef<THREE.Group>(null);
   const cloudMeshRef = useRef<THREE.Mesh>(null);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Preload known NASA datasets
+  // Preload known NASA datasets: Sea Surface Temperature, Eyes on Earth, Global Precipitation
   const [
-    auroraTex,
-    nightLightsTex,
-    aerosolsTex,
-    earthDayTex,
+    sstTex,
+    eyesOnEarthTex,
+    precipitationTex,
   ] = useLoader(THREE.TextureLoader, [
-    '/textures/snow_and_rain.jpg',
-    '/textures/night_lights.jpg',
-    '/textures/aerosols.png',
-    '/textures/earth_day.jpg',
+    '/textures/sea_surface_temperature.png',
+    '/textures/eyes_on_earth_now.jpg',
+    '/textures/imergert_1080p.now.png',
   ]);
 
   useMemo(() => {
-    auroraTex.colorSpace = THREE.SRGBColorSpace;
-    nightLightsTex.colorSpace = THREE.SRGBColorSpace;
-    aerosolsTex.colorSpace = THREE.SRGBColorSpace;
-    earthDayTex.colorSpace = THREE.SRGBColorSpace;
-    // cloudsTex.colorSpace = THREE.SRGBColorSpace;
-  }, [auroraTex, nightLightsTex, aerosolsTex, earthDayTex]);
+    sstTex.colorSpace = THREE.SRGBColorSpace;
+    eyesOnEarthTex.colorSpace = THREE.SRGBColorSpace;
+    precipitationTex.colorSpace = THREE.SRGBColorSpace;
+  }, [sstTex, eyesOnEarthTex, precipitationTex]);
 
-  // Dynamic texture loader for live scraped textures (NASA Eyes on Earth, SVS 4285, etc.)
+  // Dynamic texture loader for live scraped textures
   const [dynamicTexture, setDynamicTexture] = useState<THREE.Texture | null>(null);
 
   useEffect(() => {
@@ -155,10 +151,9 @@ export const Earth: React.FC<EarthProps> = ({
 
     // Check if textureUrl matches preloaded static textures
     if (
-      textureUrl === '/textures/night_lights.jpg' ||
-      textureUrl === '/textures/aerosols.png' ||
-      textureUrl === '/textures/earth_day.jpg' ||
-      textureUrl === '/textures/snow_and_rain.jpg'
+      textureUrl === '/textures/sea_surface_temperature.png' ||
+      textureUrl === '/textures/eyes_on_earth_now.jpg' ||
+      textureUrl === '/textures/imergert_1080p.now.png'
     ) {
       setDynamicTexture(null);
       return;
@@ -193,13 +188,11 @@ export const Earth: React.FC<EarthProps> = ({
   const activeTexture = useMemo(() => {
     if (customTexture) return customTexture;
     if (dynamicTexture) return dynamicTexture;
-    if (textureUrl.includes('eyes_on_earth')) return earthDayTex;
-    if (textureUrl.includes('imerg') || textureUrl.includes('precip')) return auroraTex;
-    if (textureUrl.includes('night_lights')) return nightLightsTex;
-    if (textureUrl.includes('aerosol')) return aerosolsTex;
-    if (textureUrl.includes('earth_day') || textureUrl.includes('frame_001')) return earthDayTex;
-    return auroraTex;
-  }, [customTexture, dynamicTexture, textureUrl, nightLightsTex, aerosolsTex, earthDayTex, auroraTex]);
+    if (textureUrl.includes('eyes_on_earth')) return eyesOnEarthTex;
+    if (textureUrl.includes('imergert') || textureUrl.includes('precip')) return precipitationTex;
+    if (textureUrl.includes('sea_surface') || textureUrl.includes('temperature') || textureUrl.includes('sst')) return sstTex;
+    return sstTex;
+  }, [customTexture, dynamicTexture, textureUrl, sstTex, eyesOnEarthTex, precipitationTex]);
 
   const atmosphereUniforms = useMemo(
     () => ({

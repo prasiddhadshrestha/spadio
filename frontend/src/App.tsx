@@ -40,6 +40,26 @@ const REGION_TRACK_MAP: Record<
   string,
   { textureUrl: string; defaultStyle: StyleId; label: string }
 > = {
+  sea_surface_temp: {
+    textureUrl: '/textures/sea_surface_temperature.png',
+    defaultStyle: 'flow',
+    label: 'Sea Surface Temperature (NASA Worldview GHRSST)',
+  },
+  worldview_sst: {
+    textureUrl: '/textures/sea_surface_temperature.png',
+    defaultStyle: 'flow',
+    label: 'Sea Surface Temperature (NASA Worldview GHRSST)',
+  },
+  current_snow_rain: {
+    textureUrl: '/textures/worldview_snow_and_rain.png',
+    defaultStyle: 'duet',
+    label: 'Current Snow & Rain (NASA Worldview IMERG)',
+  },
+  worldview_snow_rain: {
+    textureUrl: '/textures/worldview_snow_and_rain.png',
+    defaultStyle: 'duet',
+    label: 'Current Snow & Rain (NASA Worldview IMERG)',
+  },
   eyes_on_earth: {
     textureUrl: '/textures/eyes_on_earth_now.jpg',
     defaultStyle: 'duet',
@@ -50,29 +70,16 @@ const REGION_TRACK_MAP: Record<
     defaultStyle: 'layers',
     label: 'Real-Time Global Precipitation (NASA SVS 4285)',
   },
-  global_temp: {
-    textureUrl: '/textures/snow_and_rain.jpg',
-    defaultStyle: 'duet',
-    label: 'Global Mean Temperature & Aurora Lights',
-  },
-  arctic: {
-    textureUrl: '/textures/night_lights.jpg',
-    defaultStyle: 'sparkle',
-    label: 'Arctic Polar Ice & Urban Sparkle',
-  },
-  amazon: {
-    textureUrl: '/textures/aerosols.png',
-    defaultStyle: 'layers',
-    label: 'Amazon Canopy & Atmospheric Aerosols',
-  },
-  barrier_reef: {
-    textureUrl: '/textures/earth_day.jpg',
-    defaultStyle: 'flow',
-    label: 'Great Barrier Reef & Ocean Currents',
-  },
 };
 
 const FALLBACK_REGIONS: HotspotRegion[] = [
+  {
+    id: 'sea_surface_temp',
+    name: 'Sea Surface Temperature',
+    coordinates: { lat: 0.0, lng: -140.0 },
+    indicator: 'GHRSST L4 MUR Sea Surface Temperature (Worldview)',
+    latest_distress: 0.96,
+  },
   {
     id: 'eyes_on_earth',
     name: 'Eyes on Earth Live',
@@ -87,107 +94,56 @@ const FALLBACK_REGIONS: HotspotRegion[] = [
     indicator: 'Near Real-Time Precipitation (SVS 4285)',
     latest_distress: 0.96,
   },
-  {
-    id: 'global_temp',
-    name: 'Global Thermal Drift',
-    coordinates: { lat: 18.0, lng: -28.0 },
-    indicator: 'Aurora & Ocean Currents (NASA EIC)',
-    latest_distress: 0.97,
-  },
-  {
-    id: 'arctic',
-    name: 'Arctic Cryo Echo',
-    coordinates: { lat: 78.0, lng: 15.0 },
-    indicator: 'Black Marble Night Lights (SVS 5313)',
-    latest_distress: 0.88,
-  },
-  {
-    id: 'amazon',
-    name: 'Amazon Canopy Pulse',
-    coordinates: { lat: -3.46, lng: -62.21 },
-    indicator: 'GEOS Aerosol Simulation (SVS 5669)',
-    latest_distress: 0.96,
-  },
-  {
-    id: 'barrier_reef',
-    name: 'Coral Heatwave Waltz',
-    coordinates: { lat: -18.28, lng: 147.69 },
-    indicator: 'Multi-Spectral Biosphere Flow',
-    latest_distress: 0.95,
-  },
 ];
 
 const FALLBACK_DETAILS: Record<string, any> = {
-  global_temp: {
-    id: 'global_temp',
-    name: 'Global Thermal Drift',
-    indicator: 'Aurora & Ocean Currents (NASA EIC)',
-    unit: '°C vs 1951-1980',
+  sea_surface_temp: {
+    id: 'sea_surface_temp',
+    name: 'Sea Surface Temperature',
+    indicator: 'GHRSST L4 MUR Sea Surface Temperature (Worldview)',
+    unit: '°C',
     narrative:
-      'Planetary sonification reveals cyan bioluminescent ocean currents contrasting with amber city lights in expressive stereo.',
-    time_series: [
-      { year: 2000, raw_val: 0.39, distress_score: 0.22, pitch_hz: 210, harmonic_dissonance: 0.1, pulse_bpm: 66 },
-      { year: 2005, raw_val: 0.68, distress_score: 0.44, pitch_hz: 275, harmonic_dissonance: 0.28, pulse_bpm: 82 },
-      { year: 2010, raw_val: 0.72, distress_score: 0.49, pitch_hz: 295, harmonic_dissonance: 0.34, pulse_bpm: 88 },
-      { year: 2012, raw_val: 0.65, distress_score: 0.41, pitch_hz: 265, harmonic_dissonance: 0.25, pulse_bpm: 80 },
-      { year: 2016, raw_val: 1.01, distress_score: 0.76, pitch_hz: 415, harmonic_dissonance: 0.66, pulse_bpm: 116 },
-      { year: 2020, raw_val: 1.02, distress_score: 0.78, pitch_hz: 425, harmonic_dissonance: 0.68, pulse_bpm: 118 },
-      { year: 2023, raw_val: 1.17, distress_score: 0.89, pitch_hz: 480, harmonic_dissonance: 0.82, pulse_bpm: 130 },
-      { year: 2024, raw_val: 1.28, distress_score: 0.95, pitch_hz: 510, harmonic_dissonance: 0.9, pulse_bpm: 138 },
-      { year: 2026, raw_val: 1.32, distress_score: 0.97, pitch_hz: 525, harmonic_dissonance: 0.93, pulse_bpm: 142 },
-    ],
+      'Real-time global sea surface temperature retrieved directly from NASA Worldview using GHRSST L4 MUR Sea Surface Temperature and Coastlines layers.',
+    raw_val: 22.9,
+    distress_score: 0.96,
+    pitch_hz: 525,
+    pulse_bpm: 142,
   },
-  arctic: {
-    id: 'arctic',
-    name: 'Arctic Cryo Echo',
-    indicator: 'Black Marble Night Lights (SVS 5313)',
-    unit: 'Million sq km',
+  worldview_sst: {
+    id: 'sea_surface_temp',
+    name: 'Sea Surface Temperature',
+    indicator: 'GHRSST L4 MUR Sea Surface Temperature (Worldview)',
+    unit: '°C',
     narrative:
-      'Sharp bell-like plucks map satellite-observed urban settlement clusters and electrical light density across continents.',
-    time_series: [
-      { year: 2000, raw_val: 6.32, distress_score: 0.15, pitch_hz: 180, harmonic_dissonance: 0.05, pulse_bpm: 60 },
-      { year: 2005, raw_val: 5.57, distress_score: 0.32, pitch_hz: 230, harmonic_dissonance: 0.18, pulse_bpm: 72 },
-      { year: 2010, raw_val: 4.9, distress_score: 0.48, pitch_hz: 290, harmonic_dissonance: 0.35, pulse_bpm: 86 },
-      { year: 2012, raw_val: 3.41, distress_score: 0.95, pitch_hz: 520, harmonic_dissonance: 0.88, pulse_bpm: 140 },
-      { year: 2015, raw_val: 4.41, distress_score: 0.6, pitch_hz: 340, harmonic_dissonance: 0.5, pulse_bpm: 98 },
-      { year: 2020, raw_val: 3.82, distress_score: 0.82, pitch_hz: 460, harmonic_dissonance: 0.74, pulse_bpm: 125 },
-      { year: 2024, raw_val: 4.28, distress_score: 0.68, pitch_hz: 380, harmonic_dissonance: 0.58, pulse_bpm: 105 },
-      { year: 2026, raw_val: 3.65, distress_score: 0.88, pitch_hz: 490, harmonic_dissonance: 0.82, pulse_bpm: 132 },
-    ],
+      'Real-time global sea surface temperature retrieved directly from NASA Worldview using GHRSST L4 MUR Sea Surface Temperature and Coastlines layers.',
+    raw_val: 22.9,
+    distress_score: 0.96,
+    pitch_hz: 525,
+    pulse_bpm: 142,
   },
-  amazon: {
-    id: 'amazon',
-    name: 'Amazon Canopy Pulse',
-    indicator: 'GEOS Aerosol Simulation (SVS 5669)',
-    unit: 'Normalized Anomaly',
+  current_snow_rain: {
+    id: 'current_snow_rain',
+    name: 'Current Snow and Rain',
+    indicator: 'IMERG Precipitation Rate & Land Mask (Worldview)',
+    unit: 'mm / hour',
     narrative:
-      'Three simultaneous synthesized instruments sonify mineral dust (bass triangle), organic smoke (mid square), and sea salt (high sine).',
-    time_series: [
-      { year: 2000, raw_val: 0.82, distress_score: 0.08, pitch_hz: 150, harmonic_dissonance: 0.02, pulse_bpm: 55 },
-      { year: 2005, raw_val: 0.74, distress_score: 0.35, pitch_hz: 240, harmonic_dissonance: 0.22, pulse_bpm: 75 },
-      { year: 2010, raw_val: 0.69, distress_score: 0.52, pitch_hz: 310, harmonic_dissonance: 0.4, pulse_bpm: 90 },
-      { year: 2015, raw_val: 0.65, distress_score: 0.64, pitch_hz: 360, harmonic_dissonance: 0.55, pulse_bpm: 102 },
-      { year: 2020, raw_val: 0.58, distress_score: 0.8, pitch_hz: 440, harmonic_dissonance: 0.75, pulse_bpm: 120 },
-      { year: 2024, raw_val: 0.52, distress_score: 0.92, pitch_hz: 510, harmonic_dissonance: 0.89, pulse_bpm: 138 },
-      { year: 2026, raw_val: 0.5, distress_score: 0.96, pitch_hz: 540, harmonic_dissonance: 0.94, pulse_bpm: 145 },
-    ],
+      'Real-time global precipitation and snow rates retrieved from NASA Worldview using GIBS IMERG Precipitation Rate and OpenStreetMap Land Mask.',
+    raw_val: 3.8,
+    distress_score: 0.94,
+    pitch_hz: 515,
+    pulse_bpm: 138,
   },
-  barrier_reef: {
-    id: 'barrier_reef',
-    name: 'Coral Heatwave Waltz',
-    indicator: 'Multi-Spectral Biosphere Flow',
-    unit: 'Deg C above baseline',
+  worldview_snow_rain: {
+    id: 'current_snow_rain',
+    name: 'Current Snow and Rain',
+    indicator: 'IMERG Precipitation Rate & Land Mask (Worldview)',
+    unit: 'mm / hour',
     narrative:
-      'Continuous sine pads morph through musical scales as the scan line sweeps across global continental coastlines and oceanic gyres.',
-    time_series: [
-      { year: 2000, raw_val: 0.2, distress_score: 0.1, pitch_hz: 160, harmonic_dissonance: 0.04, pulse_bpm: 58 },
-      { year: 2005, raw_val: 0.5, distress_score: 0.25, pitch_hz: 210, harmonic_dissonance: 0.15, pulse_bpm: 68 },
-      { year: 2010, raw_val: 0.7, distress_score: 0.38, pitch_hz: 260, harmonic_dissonance: 0.28, pulse_bpm: 78 },
-      { year: 2016, raw_val: 1.9, distress_score: 0.9, pitch_hz: 480, harmonic_dissonance: 0.85, pulse_bpm: 130 },
-      { year: 2020, raw_val: 1.4, distress_score: 0.75, pitch_hz: 410, harmonic_dissonance: 0.68, pulse_bpm: 115 },
-      { year: 2024, raw_val: 2.1, distress_score: 0.98, pitch_hz: 530, harmonic_dissonance: 0.92, pulse_bpm: 142 },
-      { year: 2026, raw_val: 2.0, distress_score: 0.95, pitch_hz: 515, harmonic_dissonance: 0.9, pulse_bpm: 140 },
-    ],
+      'Real-time global precipitation and snow rates retrieved from NASA Worldview using GIBS IMERG Precipitation Rate and OpenStreetMap Land Mask.',
+    raw_val: 3.8,
+    distress_score: 0.94,
+    pitch_hz: 515,
+    pulse_bpm: 138,
   },
   eyes_on_earth: {
     id: 'eyes_on_earth',
@@ -196,15 +152,10 @@ const FALLBACK_DETAILS: Record<string, any> = {
     unit: 'Reflectance Index',
     narrative:
       "Real-time satellite mosaic scraped from NASA's Eyes on the Earth, bringing today's planetary cloud systems and land features into dynamic sound.",
-    time_series: [
-      { year: 2000, raw_val: 0.35, distress_score: 0.2, pitch_hz: 200, harmonic_dissonance: 0.08, pulse_bpm: 65 },
-      { year: 2005, raw_val: 0.5, distress_score: 0.38, pitch_hz: 250, harmonic_dissonance: 0.2, pulse_bpm: 78 },
-      { year: 2010, raw_val: 0.62, distress_score: 0.45, pitch_hz: 280, harmonic_dissonance: 0.3, pulse_bpm: 85 },
-      { year: 2016, raw_val: 0.88, distress_score: 0.72, pitch_hz: 395, harmonic_dissonance: 0.6, pulse_bpm: 112 },
-      { year: 2020, raw_val: 0.94, distress_score: 0.8, pitch_hz: 435, harmonic_dissonance: 0.7, pulse_bpm: 120 },
-      { year: 2024, raw_val: 1.15, distress_score: 0.92, pitch_hz: 500, harmonic_dissonance: 0.88, pulse_bpm: 135 },
-      { year: 2026, raw_val: 1.25, distress_score: 0.96, pitch_hz: 525, harmonic_dissonance: 0.93, pulse_bpm: 142 },
-    ],
+    raw_val: 1.25,
+    distress_score: 0.96,
+    pitch_hz: 525,
+    pulse_bpm: 142,
   },
   realtime_precipitation: {
     id: 'realtime_precipitation',
@@ -213,72 +164,20 @@ const FALLBACK_DETAILS: Record<string, any> = {
     unit: 'mm/h',
     narrative:
       'Near real-time global precipitation scraped from NASA SVS 4285 and the GPM constellation, sonifying active rain bands and storm fronts worldwide.',
-    time_series: [
-      { year: 2000, raw_val: 2.1, distress_score: 0.12, pitch_hz: 180, harmonic_dissonance: 0.06, pulse_bpm: 64 },
-      { year: 2005, raw_val: 2.3, distress_score: 0.28, pitch_hz: 220, harmonic_dissonance: 0.16, pulse_bpm: 74 },
-      { year: 2010, raw_val: 2.6, distress_score: 0.42, pitch_hz: 280, harmonic_dissonance: 0.26, pulse_bpm: 84 },
-      { year: 2016, raw_val: 3.4, distress_score: 0.78, pitch_hz: 420, harmonic_dissonance: 0.65, pulse_bpm: 118 },
-      { year: 2020, raw_val: 3.6, distress_score: 0.84, pitch_hz: 450, harmonic_dissonance: 0.72, pulse_bpm: 124 },
-      { year: 2024, raw_val: 3.9, distress_score: 0.92, pitch_hz: 495, harmonic_dissonance: 0.86, pulse_bpm: 136 },
-      { year: 2026, raw_val: 4.1, distress_score: 0.96, pitch_hz: 520, harmonic_dissonance: 0.92, pulse_bpm: 140 },
-    ],
+    raw_val: 4.1,
+    distress_score: 0.96,
+    pitch_hz: 520,
+    pulse_bpm: 140,
   },
 };
 
-function interpolateTelemetry(timeSeries: any[] | undefined, targetYear: number) {
-  if (!timeSeries || timeSeries.length === 0) {
-    return {
-      year: targetYear,
-      raw_val: 0.5,
-      distress_score: 0.5,
-      pitch_hz: 300,
-      harmonic_dissonance: 0.3,
-      pulse_bpm: 80,
-    };
-  }
-
-  const exact = timeSeries.find((p) => p.year === targetYear);
-  if (exact) return exact;
-
-  const sorted = [...timeSeries].sort((a, b) => a.year - b.year);
-  if (targetYear <= sorted[0].year) return sorted[0];
-  if (targetYear >= sorted[sorted.length - 1].year) return sorted[sorted.length - 1];
-
-  let lower = sorted[0];
-  let upper = sorted[sorted.length - 1];
-  for (let i = 0; i < sorted.length - 1; i++) {
-    if (sorted[i].year <= targetYear && sorted[i + 1].year >= targetYear) {
-      lower = sorted[i];
-      upper = sorted[i + 1];
-      break;
-    }
-  }
-
-  const t = (targetYear - lower.year) / (upper.year - lower.year);
-  return {
-    year: targetYear,
-    raw_val: +(lower.raw_val + t * ((upper.raw_val ?? lower.raw_val) - lower.raw_val)).toFixed(2),
-    distress_score: +(lower.distress_score + t * (upper.distress_score - lower.distress_score)).toFixed(3),
-    pitch_hz: Math.round(lower.pitch_hz + t * (upper.pitch_hz - lower.pitch_hz)),
-    harmonic_dissonance: +(
-      lower.harmonic_dissonance +
-      t * (upper.harmonic_dissonance - lower.harmonic_dissonance)
-    ).toFixed(3),
-    pulse_bpm: Math.round(lower.pulse_bpm + t * (upper.pulse_bpm - lower.pulse_bpm)),
-  };
-}
-
 function formatActiveMetric(regionId: string, rawVal: number | undefined): string {
   if (rawVal === undefined || Number.isNaN(rawVal)) return '--';
-  if (regionId === 'global_temp' || regionId === 'barrier_reef') {
-    const sign = rawVal >= 0 ? '+' : '';
-    return `${sign}${rawVal.toFixed(2)} °C`;
+  if (regionId === 'sea_surface_temp' || regionId === 'worldview_sst') {
+    return `${rawVal.toFixed(1)} °C`;
   }
-  if (regionId === 'arctic') {
-    return `${rawVal.toFixed(2)} M km²`;
-  }
-  if (regionId === 'amazon') {
-    return `${rawVal.toFixed(2)} NDVI`;
+  if (regionId === 'current_snow_rain' || regionId === 'worldview_snow_rain') {
+    return `${rawVal.toFixed(2)} mm/h`;
   }
   if (regionId === 'realtime_precipitation') {
     return `${rawVal.toFixed(2)} mm/h`;
@@ -296,10 +195,9 @@ export const App: React.FC = () => {
   // UI State
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [regions, setRegions] = useState<HotspotRegion[]>(FALLBACK_REGIONS);
-  const [selectedRegionId, setSelectedRegionId] = useState<string>('eyes_on_earth');
-  const [selectedYear, setSelectedYear] = useState<number>(2026);
+  const [selectedRegionId, setSelectedRegionId] = useState<string>('sea_surface_temp');
   const [volume, setVolume] = useState<number>(0.75);
-  const [regionDetail, setRegionDetail] = useState<any>(FALLBACK_DETAILS.eyes_on_earth);
+  const [regionDetail, setRegionDetail] = useState<any>(FALLBACK_DETAILS.sea_surface_temp);
   const [autoSweep, setAutoSweep] = useState<boolean>(true);
 
   // Sonification & 3D Planet Scan Line State
@@ -307,14 +205,14 @@ export const App: React.FC = () => {
   const [peakY, setPeakY] = useState<number>(0.5);
   const [featureColor, setFeatureColor] = useState<string>('#38bdf8');
   const [selectedStyle, setSelectedStyle] = useState<StyleId>('auto');
-  const [resolvedStyle, setResolvedStyle] = useState<Exclude<StyleId, 'auto'>>('duet');
+  const [resolvedStyle, setResolvedStyle] = useState<Exclude<StyleId, 'auto'>>('flow');
   const [scaleId, setScaleId] = useState<ScaleId>('pentatonic');
   const [speed, setSpeed] = useState<number>(3);
   const [voiceEnabled, setVoiceEnabled] = useState<boolean>(false);
   const [currentCaption, setCurrentCaption] = useState<string>('');
 
-  // Planetary Image Texture State - Defaults to NASA Eyes on Earth live imagery
-  const [textureUrl, setTextureUrl] = useState<string>('/textures/eyes_on_earth_now.jpg');
+  // Planetary Image Texture State - Defaults to NASA Worldview Sea Surface Temperature
+  const [textureUrl, setTextureUrl] = useState<string>('/textures/sea_surface_temperature.png');
   const [customTexture, setCustomTexture] = useState<THREE.CanvasTexture | null>(null);
   const [customImageName, setCustomImageName] = useState<string>('');
   const [isCustomLoaded, setIsCustomLoaded] = useState<boolean>(false);
@@ -323,10 +221,10 @@ export const App: React.FC = () => {
   // 3D Earth Loading State (Skeleton UI)
   const [isEarthLoading, setIsEarthLoading] = useState<boolean>(true);
   const [earthLoadingMessage, setEarthLoadingMessage] = useState<string>(
-    "Connecting to NASA's Eyes on the Earth..."
+    'Scraping NASA Worldview Sea Surface Temperature...'
   );
   const [earthLoadingSubMessage, setEarthLoadingSubMessage] = useState<string>(
-    'Scraping NOAA-21 / VIIRS true-color 24-hour composite (bottom-right preview)...'
+    'Retrieving real-time GHRSST MUR Sea Surface Temperature from NASA Worldview...'
   );
 
   // References for live scheduler loop
@@ -398,7 +296,7 @@ export const App: React.FC = () => {
   // Helper to fetch direct image URL from backend and apply to 3D Earth with CORS fallback
   const loadNasaDatasetFromBackend = useCallback(
     (
-      dataset: 'eyes_on_earth' | 'precipitation',
+      dataset: 'eyes_on_earth' | 'precipitation' | 'worldview_snow_rain' | 'worldview_sst',
       loadingMsg: string,
       loadingSubMsg: string,
       fallbackTextureUrl: string
@@ -410,6 +308,10 @@ export const App: React.FC = () => {
       const endpoint =
         dataset === 'eyes_on_earth'
           ? 'http://localhost:8000/api/nasa/eyes-on-earth/url'
+          : dataset === 'worldview_sst'
+          ? 'http://localhost:8000/api/nasa/worldview-sst/url'
+          : dataset === 'worldview_snow_rain'
+          ? 'http://localhost:8000/api/nasa/worldview-snow-rain/url'
           : 'http://localhost:8000/api/nasa/precipitation/url';
 
       fetch(endpoint)
@@ -476,13 +378,13 @@ export const App: React.FC = () => {
     [applyTextureWithSkeleton]
   );
 
-  // Pre-fetch live Eyes on Earth image URL on startup
+  // Pre-fetch live Sea Surface Temperature image URL from NASA Worldview on startup
   useEffect(() => {
     loadNasaDatasetFromBackend(
-      'eyes_on_earth',
-      "Scraping NASA's Eyes on the Earth Live Mosaic...",
-      'Receiving direct image URL from NOAA-21 / VIIRS true-color 24-hour composite...',
-      '/textures/eyes_on_earth_now.jpg'
+      'worldview_sst',
+      'Scraping NASA Worldview Sea Surface Temperature...',
+      'Receiving real-time GHRSST MUR Sea Surface Temperature from NASA Worldview...',
+      '/textures/sea_surface_temperature.png'
     );
   }, [loadNasaDatasetFromBackend]);
 
@@ -497,7 +399,7 @@ export const App: React.FC = () => {
         setRegionDetail(data);
       })
       .catch(() => {
-        setRegionDetail(FALLBACK_DETAILS[selectedRegionId] || FALLBACK_DETAILS.global_temp);
+        setRegionDetail(FALLBACK_DETAILS[selectedRegionId] || FALLBACK_DETAILS.current_snow_rain);
       });
   }, [selectedRegionId]);
 
@@ -579,10 +481,6 @@ export const App: React.FC = () => {
       setCurrentBandIndex(nextIdx);
       currentBandRef.current = nextIdx;
       playBandStep(nextIdx);
-
-      // Smoothly sync Year Tuner (2000 to 2026)
-      const synYear = 2000 + Math.round((nextIdx / (BAND_COUNT - 1)) * 26);
-      setSelectedYear(synYear);
     });
 
     return () => {
@@ -610,8 +508,6 @@ export const App: React.FC = () => {
       setCurrentBandIndex(clamped);
       currentBandRef.current = clamped;
       playBandStep(clamped);
-      const synYear = 2000 + Math.round((clamped / (BAND_COUNT - 1)) * 26);
-      setSelectedYear(synYear);
     },
     [playBandStep]
   );
@@ -625,8 +521,26 @@ export const App: React.FC = () => {
 
       const mapping = REGION_TRACK_MAP[regionId] || REGION_TRACK_MAP.eyes_on_earth;
 
-      // 1. If Real-Time Global Precipitation is selected (NASA SVS 4285)
-      if (regionId === 'realtime_precipitation') {
+      // 1. If Sea Surface Temperature is selected (NASA Worldview GHRSST)
+      if (regionId === 'sea_surface_temp' || regionId === 'worldview_sst') {
+        loadNasaDatasetFromBackend(
+          'worldview_sst',
+          'Scraping NASA Worldview Sea Surface Temperature...',
+          'Receiving real-time GHRSST MUR Sea Surface Temperature from NASA Worldview...',
+          '/textures/sea_surface_temperature.png'
+        );
+      }
+      // 2. If Current Snow and Rain is selected (NASA Worldview IMERG & Land Mask)
+      else if (regionId === 'current_snow_rain' || regionId === 'worldview_snow_rain') {
+        loadNasaDatasetFromBackend(
+          'worldview_snow_rain',
+          'Scraping NASA Worldview Snow & Rain...',
+          'Receiving real-time IMERG Precipitation Rate & Land Mask from NASA Worldview...',
+          '/textures/worldview_snow_and_rain.png'
+        );
+      }
+      // 2. If Real-Time Global Precipitation is selected (NASA SVS 4285)
+      else if (regionId === 'realtime_precipitation') {
         loadNasaDatasetFromBackend(
           'precipitation',
           'Scraping NASA SVS 4285 Precipitation...',
@@ -634,7 +548,7 @@ export const App: React.FC = () => {
           '/textures/imergert_1080p.now.png'
         );
       }
-      // 2. If Eyes on Earth Live is selected (NASA Eyes on Earth - Visible Earth Panel)
+      // 3. If Eyes on Earth Live is selected (NASA Eyes on Earth - Visible Earth Panel)
       else if (regionId === 'eyes_on_earth') {
         loadNasaDatasetFromBackend(
           'eyes_on_earth',
@@ -643,7 +557,7 @@ export const App: React.FC = () => {
           '/textures/eyes_on_earth_now.jpg'
         );
       }
-      // 3. For other preset tracks, load their respective planetary textures
+      // 4. For other preset tracks, load their respective planetary textures
       else {
         setEarthLoadingMessage(`Loading ${mapping.label}...`);
         setEarthLoadingSubMessage('Mapping planetary dataset to 3D sphere');
@@ -792,21 +706,7 @@ export const App: React.FC = () => {
     handleSelectRegion(regions[nextIdx].id);
   }, [regions, selectedRegionId, handleSelectRegion]);
 
-  const handleManualYearChange = useCallback(
-    (y: number) => {
-      setSelectedYear(y);
-      // Map year (2000-2026) to band (0-47)
-      const mappedBand = Math.round(((y - 2000) / 26) * (BAND_COUNT - 1));
-      handleSeekBand(mappedBand);
-    },
-    [handleSeekBand]
-  );
-
-  const activePoint = useMemo(() => {
-    return interpolateTelemetry(regionDetail?.time_series, selectedYear);
-  }, [regionDetail, selectedYear]);
-
-  const activeMetricLabel = formatActiveMetric(selectedRegionId, activePoint?.raw_val);
+  const activeMetricLabel = formatActiveMetric(selectedRegionId, regionDetail?.raw_val);
 
   return (
     <div className="w-screen h-screen overflow-hidden bg-[#e2e5ec]">
@@ -824,7 +724,7 @@ export const App: React.FC = () => {
         regionName={
           isCustomLoaded
             ? `Uploaded: ${customImageName}`
-            : regionDetail?.name || 'Global Mean Temperature'
+            : regionDetail?.name || 'Current Snow and Rain'
         }
         indicator={
           isCustomLoaded
@@ -833,11 +733,9 @@ export const App: React.FC = () => {
         }
         narrative={regionDetail?.narrative || ''}
         activeMetricLabel={activeMetricLabel}
-        distressScore={activePoint?.distress_score ?? 0.5}
-        pitchHz={activePoint?.pitch_hz ?? 300}
-        pulseBpm={activePoint?.pulse_bpm ?? 80}
-        year={selectedYear}
-        onYearChange={handleManualYearChange}
+        distressScore={regionDetail?.distress_score ?? 0.5}
+        pitchHz={regionDetail?.pitch_hz ?? 300}
+        pulseBpm={regionDetail?.pulse_bpm ?? 80}
         autoSweep={autoSweep}
         onToggleAutoSweep={() => setAutoSweep((prev) => !prev)}
         currentBandIndex={currentBandIndex}
