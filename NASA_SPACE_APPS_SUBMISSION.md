@@ -25,18 +25,18 @@ Spadio turns silent satellite data into an accessible stethoscope for our living
 *Hard rule: Must be 30.0 seconds or less. This script runs 28.5 seconds.*
 
 ### Shot List & Storyboard
-- **0:00 - 0:06 (Filmed with Aoi):**
-  - *Visual:* Aoi sits with eyes closed, listening to headphones. 3D Earth runs on laptop in background.
-  - *Spoken (Aoi):* "My eyes are closed, but I can hear heavy storm bands crossing the equator."
-- **0:06 - 0:11 (Live Action with Prasiddha):**
-  - *Visual:* Cut to Prasiddha at the desk, gesturing to the running laptop screen.
-  - *Spoken (Prasiddha):* "This is Spadio. We convert NASA Earth science data into deterministic, real-time musical harmony."
+- **0:00 - 0:06 (Accessibility Demonstration):**
+  - *Visual:* Presenter sits with eyes closed, listening to headphones. 3D Earth runs on laptop in background.
+  - *Spoken (Presenter 1):* "My eyes are closed, but I can hear heavy storm bands crossing the equator."
+- **0:06 - 0:11 (Technical Overview):**
+  - *Visual:* Cut to presenter at the desk, gesturing to the running laptop screen.
+  - *Spoken (Presenter 2):* "This is Spadio. We convert NASA Earth science data into deterministic, real-time musical harmony."
 - **0:11 - 0:18 (Screen Recording: 2D SVS Console):**
   - *Visual:* 48-band spectrometer sweeps across an SVS frame (Atmospheric River or Black Marble). Live spectrum jumps, frequency HUD displays exact Hz.
-  - *Spoken (Prasiddha):* "Our 2D console scans 48 spatial bands across 10 official NASA SVS datasets, mapping luminance to volume and latitude to quantized pitch."
+  - *Spoken (Presenter 2):* "Our 2D console scans 48 spatial bands across 10 official NASA SVS datasets, mapping luminance to volume and latitude to quantized pitch."
 - **0:18 - 0:24 (Screen Recording: 3D Live Earth):**
   - *Visual:* Smooth mouse rotation of the Three.js 3D globe showing atmospheric glow and live precipitation textures.
-  - *Spoken (Prasiddha):* "Switching to 3D Live Earth delivers global planetary context, sonifying real-time NASA precipitation and climate hotspots."
+  - *Spoken (Presenter 2):* "Switching to 3D Live Earth delivers global planetary context, sonifying real-time NASA precipitation and climate hotspots."
 - **0:24 - 0:28.5 (Title Card):**
   - *Visual:* High-contrast card: SPADIO / Team Smooth Butter / NASA Space Apps 2026 / GitHub link. Chime fades out.
   - *Spoken (Voiceover):* "Tune in to Spadio. Listen to Earth."
