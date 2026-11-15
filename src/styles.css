@@ -591,8 +591,9 @@ a:hover {
   width: 2.5px;
   background: #ffffff;
   box-shadow: 0 0 12px #38bdf8, 0 0 20px #38bdf8;
+  opacity: 0;
   pointer-events: none;
-  transition: transform 0.08s linear;
+  transition: transform 0.08s linear, opacity 120ms ease;
 }
 
 .scan-hline {
@@ -602,22 +603,56 @@ a:hover {
   height: 2.5px;
   background: #ffffff;
   box-shadow: 0 0 12px #38bdf8, 0 0 20px #38bdf8;
+  opacity: 0;
   pointer-events: none;
-  transition: transform 0.08s linear;
+  transition: transform 0.08s linear, opacity 120ms ease;
+}
+
+.scan-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  border: 2.5px solid rgba(255, 255, 255, 0.82);
+  box-shadow: 0 0 8px #38bdf8, inset 0 0 8px #38bdf8;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
 }
 
 .scan-radar {
   position: absolute;
-  top: 50%;
   left: 50%;
-  width: 200%;
-  height: 200%;
-  border-radius: 50%;
-  background: conic-gradient(from 0deg, rgba(56, 189, 248, 0.45) 0deg, transparent 45deg);
-  transform-origin: center center;
+  bottom: 50%;
+  width: 3px;
+  height: 115%;
+  margin-left: -1.5px;
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(56, 189, 248, 0.85) 50%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  box-shadow: 0 0 10px #38bdf8, 0 0 18px rgba(56, 189, 248, 0.8);
+  transform-origin: 50% 100%;
+  opacity: 0;
   pointer-events: none;
-  margin-top: -100%;
-  margin-left: -100%;
+  border-radius: 2px;
+  transition: transform 0.08s linear, opacity 120ms ease;
+}
+
+.scan-radar::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 6px #38bdf8;
 }
 
 .stage-overlay {
