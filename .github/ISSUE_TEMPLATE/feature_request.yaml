@@ -1,0 +1,42 @@
+name: 🦊 New Feature
+description: Implement a new feature
+labels: ["new feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please write your ideas and description below
+
+  - type: textarea
+    id: feature
+    attributes:
+      label: 🏷️ Details of the feature
+      description: Write about what feature you want to add to SmoothButter
+      placeholder: e.g., Implement User sign up feature
+    validations:
+      required: true
+
+  - type: textarea
+    id: todo
+    attributes:
+      label:  ✅ TODOs
+      description: To add the feature, what do you specifically need to work on?
+      placeholder: "- [ ] Add user sign up feature to backend"
+    validations:
+      required: true
+
+  - type: textarea
+    id: image
+    attributes:
+      label: 📸 Images
+      description: Add screenshots or other images, please attach here
+    validations:
+      required: false
+
+  - type: textarea
+    id: comment
+    attributes:
+      label: 🦷 Comment
+      description: Question? Comment? Write here!
+    validations:
+      required: false
