@@ -310,6 +310,13 @@ export const RadioScreen: React.FC<RadioScreenProps> = ({
               <nav className="flex items-center gap-1.5 p-1 rounded-full bg-[#0a0d14]/92 backdrop-blur-md border border-white/[0.18] shadow-2xl">
                 <a
                   href="/"
+                  onClick={(e) => {
+                    // Fall back to in-app 2D view if standalone dev server redirects root /
+                    if (window.location.pathname === '/live-earth/' || window.location.pathname === '/live-earth') {
+                      e.preventDefault();
+                      setViewMode('2d');
+                    }
+                  }}
                   className="group flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-bold tracking-wider text-cyan-400 hover:text-white hover:bg-cyan-500/20 border border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_12px_rgba(6,182,212,0.2)] hover:shadow-[0_0_18px_rgba(6,182,212,0.5)] active:scale-95"
                   title="Switch to 2D SVS Laboratory Console"
                 >
