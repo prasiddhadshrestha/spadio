@@ -2,7 +2,8 @@
 **Challenge:** The Earth Information Jukebox  
 **Team:** Smooth Butter  
 **Project Title:** Spadio: The Earth Information Jukebox  
-**Repository:** https://github.com/aoiorio/smooth_butter  
+**Repository:** https://github.com/prasiddhadshrestha/spadio  
+**Live Interactive App:** https://prasiddhadshrestha.github.io/spadio/  
 
 ---
 

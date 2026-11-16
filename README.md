@@ -2,6 +2,9 @@
 
 **Hear a changing planet.** Spadio transforms NASA Earth Information Center (EIC) and Scientific Visualization Studio (SVS) imagery into real-time, deterministic, blind-and-low-vision-first sonifications directly in the browser.
 
+👉 **Live Interactive App:** [https://prasiddhadshrestha.github.io/spadio/](https://prasiddhadshrestha.github.io/spadio/)  
+👉 **Project Repository:** [https://github.com/prasiddhadshrestha/spadio](https://github.com/prasiddhadshrestha/spadio)  
+
 ---
 
 ## Dual-Perspective Architecture
