@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SPADIO - NASA EIC Multisensory Sonification Console</title>
+  <script type="module" crossorigin src="./assets/index-0t_zPxMI.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-ewafeiFM.css">
+</head>
+<body>
+  <a href="#main-stage" class="skip-link">Skip to Sonification Stage</a>
+
+  <div class="radio-chassis">
+    <!-- Braun / Apple Minimalist Radio Header -->
+    <header class="radio-header">
+      <div class="radio-brand">
+        <!-- Tactile Perforated Speaker Grille -->
+        <div class="speaker-grille" aria-hidden="true"></div>
+        <div class="brand-title">
+          <h1>SPADIO</h1>
+          <span class="brand-freq">FM 88.1 - 108.0 MHz · NASA EIC SATELLITE SONIFICATION</span>
+        </div>
+      </div>
+
+      <!-- Prominent Dual-Perspective Segmented Switcher -->
+      <nav class="perspective-switcher" aria-label="Scientific Viewport Mode">
+        <div class="perspective-tab active" title="Current View: 2D SVS Laboratory Spectrometer">
+          <span class="pulse-indicator active"></span>
+          <span class="tab-icon">📻</span>
+          <span class="tab-title">2D SVS Console</span>
+          <span class="tab-badge">Active</span>
+        </div>
+        <a href="./live-earth/index.html" class="perspective-tab link" title="Click to launch 3D Planetary Orbit & Live Precipitation">
+          <span class="pulse-indicator live-cyan"></span>
+          <span class="tab-icon">🛰️</span>
+          <span class="tab-title">3D Live Earth</span>
+          <span class="tab-badge-cyan">Orbit View ↗</span>
+        </a>
+      </nav>
+
+      <div class="radio-actions" role="toolbar" aria-label="Accessibility and display tools">
+        <button id="btn-voice" type="button" aria-pressed="false" class="neu-btn">Narration: Off</button>
+        <button id="btn-hc" type="button" aria-pressed="false" class="neu-btn">High Contrast</button>
+        <button id="btn-shortcuts" type="button" aria-expanded="false" class="neu-btn">Shortcuts [?]</button>
+        <button id="btn-about" type="button" aria-expanded="false" class="neu-btn">Scientific Proof</button>
+      </div>
+    </header>
+
+    <!-- Collapsible Documentation Panel -->
+    <section id="panel-about" hidden class="neu-panel" aria-labelledby="about-heading">
+      <div class="panel-title-bar">
+        <h2 id="about-heading">Scientific Causal Mapping Proof</h2>
+        <button id="close-about" type="button" class="neu-btn">Close</button>
+      </div>
+      <p>
+        <strong>Mathematical Origin:</strong> Earth Jukebox executes deterministic parameter-mapping sonification across 48 discrete spatial bands. Image luminance $L \in [0, 1]$ modulates harmonic amplitude, vertical coordinate $Y$ maps inversely to fundamental frequency $F_0 \in [130\text{Hz}, 1046\text{Hz}]$ quantized to pentatonic/minor scale degrees, and color hue determines timbral harmonic distribution (warm hues trigger low-order harmonics; cool hues activate crystalline upper partials).
+      </p>
+      <p>
+        <strong>Data Source:</strong> Direct satellite observations from the NASA Scientific Visualization Studio (SVS) and Earth Information Center (EIC).
+      </p>
+    </section>
+
+    <!-- Collapsible Shortcuts Help Panel -->
+    <section id="panel-shortcuts" hidden class="neu-panel" aria-labelledby="shortcuts-heading">
+      <div class="panel-title-bar">
+        <h2 id="shortcuts-heading">Keyboard Shortcuts</h2>
+        <button id="close-shortcuts" type="button" class="neu-btn">Close</button>
+      </div>
+      <div class="shortcuts-grid" style="font-size: 13px;">
+        <ul style="padding-left: 18px; margin: 0; display: flex; flex-direction: column; gap: 6px;">
+          <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">Space</kbd> : Power / Play / Pause audio</li>
+          <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">[ / ]</kbd> : Previous / Next NASA SVS Track</li>
+          <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">N</kbd> : Toggle Spoken Narration</li>
+          <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">H</kbd> : Toggle High Contrast Mode (WCAG AAA)</li>
+          <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">L</kbd> : Toggle Loop On / Off</li>
+          <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">1 - 5</kbd> : Select Sound Style (Sparkle, Flow, Layers, Field, Duet)</li>
+          <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">↑ / ↓</kbd> : Adjust Acoustic Output Volume</li>
+          <li><kbd style="padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.1); font-weight: bold;">?</kbd> : Toggle this help menu</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Main Dual-Deck Console -->
+    <main id="main-stage" class="radio-deck">
+      <!-- LEFT DECK: Controls, Radio Station Tuner, and Sound Styling -->
+      <section class="deck-controls" aria-label="Playback Controls and Track Tuner">
+        
+        <!-- NASA EIC Station Tuner -->
+        <div class="neu-panel">
+          <div class="panel-title-bar">
+            <h2>1. Station Tuner (NASA SVS Archive)</h2>
+            <span id="frame-badge" class="badge badge-accent">NASA SVS</span>
+          </div>
+          <div id="track-shelf" class="track-grid" role="listbox" aria-label="Select NASA Track"></div>
+        </div>
+
+        <!-- Sound Harmonic Style -->
+        <div class="neu-panel">
+          <div class="panel-title-bar">
+            <h2>2. Harmonic Palette</h2>
+            <span id="auto-badge" class="badge badge-accent">Auto</span>
+          </div>
+          <div id="style-buttons" class="style-row" role="group" aria-label="Sound style selection"></div>
+          <p id="style-why" class="why-text"></p>
+        </div>
+
+        <!-- Hardware Transport & Tactile Tuning Row -->
+        <div class="neu-panel">
+          <div class="panel-title-bar">
+            <h2>3. Master Transport & Rotary Deck</h2>
+          </div>
+
+          <div class="hardware-row">
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button id="btn-play" type="button" aria-pressed="false" class="neu-btn neu-btn-primary" style="font-size: 14px; padding: 10px 20px;">
+                ▶ Power / Play
+              </button>
+              <button id="btn-upload" type="button" class="neu-btn">Upload Frame</button>
+              <input id="file-input" type="file" accept="image/png,image/jpeg,image/webp" hidden aria-label="Upload custom Earth frame" />
+              <button id="btn-loop" type="button" aria-pressed="true" class="neu-btn">Loop: On</button>
+            </div>
+
+            <!-- Rotary Vintage Dial -->
+            <div class="rotary-knob-container">
+              <div id="rotary-tuner" class="rotary-knob" tabindex="0" role="slider" aria-label="Master Scan Frequency Dial" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3">
+                <div class="rotary-notch"></div>
+                <div class="rotary-cap">SPD</div>
+              </div>
+              <span class="knob-caption">ROTARY SPEED</span>
+            </div>
+          </div>
+
+          <!-- Parameters & Sliders -->
+          <div class="control-grid">
+            <label class="field">
+              <span>Musical Scale</span>
+              <select id="sel-scale" class="neu-select">
+                <option value="pentatonic">Pentatonic (Harmonic Restraint)</option>
+                <option value="minor">Natural Minor (Urgency & Tension)</option>
+                <option value="wholeTone">Whole Tone (Dreamlike Drift)</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span>Scan Vector</span>
+              <select id="sel-scan" class="neu-select">
+                <option value="radar">Radar Sweep (Orbital Circular)</option>
+                <option value="lr">West → East (Longitudinal Scan)</option>
+                <option value="rl">East → West</option>
+                <option value="tb">North → South (Latitudinal Descent)</option>
+                <option value="rad">Radial Center-Out (Planetary Core)</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span>Scan Velocity: <strong id="lbl-spd">3</strong></span>
+              <input id="rng-spd" type="range" min="1" max="5" value="3" />
+            </label>
+
+            <label class="field">
+              <span>Acoustic Output: <strong id="lbl-vol">75%</strong></span>
+              <input id="rng-vol" type="range" min="0" max="100" value="75" />
+            </label>
+          </div>
+
+          <div id="frame-slider-wrap" class="frame-slider-wrap" hidden style="margin-top: 12px;">
+            <label class="field">
+              <span>Time Sequence Step: <strong id="lbl-frame">1 / 1</strong></span>
+              <input id="rng-frame" type="range" min="0" max="0" value="0" />
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT DECK: CRT Bezel Screen, 48-Band Frequency Visualizer, and Accessible Audio Terminal -->
+      <section class="deck-stage" aria-label="Visual Stage and Accessible Readout">
+        <!-- CRT Monitor Bezel with NASA Imagery -->
+        <div class="crt-bezel">
+          <div class="canvas-wrap">
+            <canvas id="cv" width="640" height="358" aria-label="NASA Earth Visualization Frame"></canvas>
+            <canvas id="fx" width="640" height="358" aria-hidden="true"></canvas>
+            <div id="scan-line" class="scan-vline" aria-hidden="true"></div>
+            <div id="scan-hline" class="scan-hline" aria-hidden="true"></div>
+            <div id="scan-ring" class="scan-ring" aria-hidden="true"></div>
+            <div id="scan-radar" class="scan-radar" aria-hidden="true"></div>
+            <div id="stage-title" class="stage-overlay"></div>
+          </div>
+
+          <!-- 48-Band Frequency Spectrum -->
+          <div class="strip-wrap">
+            <div class="strip-head">
+              <span>48-BAND SPATIAL SONIFICATION SPECTRUM (LUMINANCE & HUE)</span>
+              <span id="band-readout">Band 0/48</span>
+            </div>
+            <canvas id="strip" width="640" height="44" aria-hidden="true"></canvas>
+          </div>
+
+          <!-- Real-Time Causal Sonification Probe HUD -->
+          <div id="probe-hud" class="probe-hud-bar" role="region" aria-label="Live Sonification Telemetry Probe">
+            <div class="probe-item">
+              <span class="probe-lbl">BAND INDEX</span>
+              <strong id="probe-band" class="probe-val">Band -- / 48</strong>
+            </div>
+            <div class="probe-item">
+              <span class="probe-lbl">LUMINANCE → GAIN</span>
+              <strong id="probe-luma" class="probe-val">--% (0.00 dB)</strong>
+            </div>
+            <div class="probe-item">
+              <span class="probe-lbl">Y-COORD → FREQ</span>
+              <strong id="probe-freq" class="probe-val">-- Hz (---)</strong>
+            </div>
+            <div class="probe-item">
+              <span class="probe-lbl">HUE → TIMBRE</span>
+              <strong id="probe-hue" class="probe-val">---° (Neutral)</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Real-Time Screen Reader Accessible Live Caption -->
+        <div class="neu-panel caption-card">
+          <span class="caption-label">Auditory Caption · Screen Reader Live Feed</span>
+          <p id="live-cap" class="live-caption-text" aria-live="polite" aria-atomic="true">Press Power to initiate real-time sonification of Earth data.</p>
+        </div>
+
+        <!-- Parameter Mapping Breakdown -->
+        <div class="mapping-cards">
+          <article class="neu-panel map-card">
+            <h3>PITCH COUPLING</h3>
+            <p id="map-pitch">Loading...</p>
+          </article>
+          <article class="neu-panel map-card">
+            <h3>AMPLITUDE DYNAMICS</h3>
+            <p id="map-vol">Loading...</p>
+          </article>
+          <article class="neu-panel map-card">
+            <h3>TIMBRE & TEXTURE</h3>
+            <p id="map-rhythm">Loading...</p>
+          </article>
+        </div>
+
+        <!-- Scientific Context Card -->
+        <article class="neu-panel" aria-label="Scientific Context">
+          <div class="panel-title-bar">
+            <h2>Planetary Telemetry & Context</h2>
+          </div>
+          <p id="track-desc" style="margin: 0 0 6px; font-weight: 600; color: #1e293b;"></p>
+          <p id="track-why" class="why-text" style="margin: 0;"></p>
+        </article>
+      </section>
+    </main>
+  </div>
+
+</body>
+</html>
