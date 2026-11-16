@@ -2,6 +2,7 @@ import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { useFrame, useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
 import { BAND_COUNT } from '../sonification/presets';
+import { resolveTextureUrl } from '../utils/textureUrl';
 
 export interface EarthProps {
   textureUrl?: string;
@@ -115,7 +116,7 @@ function SonificationScanLine({
 }
 
 export const Earth: React.FC<EarthProps> = ({
-  textureUrl = '/textures/sea_surface_temperature.png',
+  textureUrl = resolveTextureUrl('textures/sea_surface_temperature.png'),
   customTexture = null,
   currentBandIndex = 0,
   isPlaying = false,
@@ -131,9 +132,9 @@ export const Earth: React.FC<EarthProps> = ({
     eyesOnEarthTex,
     precipitationTex,
   ] = useLoader(THREE.TextureLoader, [
-    '/textures/sea_surface_temperature.png',
-    '/textures/eyes_on_earth_now.jpg',
-    '/textures/imergert_1080p.now.png',
+    resolveTextureUrl('textures/sea_surface_temperature.png'),
+    resolveTextureUrl('textures/eyes_on_earth_now.jpg'),
+    resolveTextureUrl('textures/imergert_1080p.now.png'),
   ]);
 
   useMemo(() => {
@@ -151,9 +152,9 @@ export const Earth: React.FC<EarthProps> = ({
 
     // Check if textureUrl matches preloaded static textures
     if (
-      textureUrl === '/textures/sea_surface_temperature.png' ||
-      textureUrl === '/textures/eyes_on_earth_now.jpg' ||
-      textureUrl === '/textures/imergert_1080p.now.png'
+      textureUrl.includes('sea_surface_temperature') ||
+      textureUrl.includes('eyes_on_earth_now') ||
+      textureUrl.includes('imergert_1080p')
     ) {
       setDynamicTexture(null);
       return;
@@ -164,7 +165,7 @@ export const Earth: React.FC<EarthProps> = ({
     loader.setCrossOrigin('anonymous');
 
     loader.load(
-      textureUrl,
+      resolveTextureUrl(textureUrl),
       (tex) => {
         if (isCancelled) {
           tex.dispose();
