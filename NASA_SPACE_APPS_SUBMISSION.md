@@ -85,42 +85,39 @@ Generative AI tools (LLMs) were used strictly during the development phase as co
 
 ---
 
-## 5. NASA Data & Resources (Verified Citations)
+## 5. NASA Data & Resources (100% Live Verified 200 OK Links)
 
-1. **NASA EOSDIS / GIBS WMS EPSG:4326**  
-   `https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi`  
-   - Layer: `GHRSST_L4_MUR_Sea_Surface_Temperature` (PO.DAAC Group for High Resolution Sea Surface Temperature L4 analysis)  
-   - Layer: `IMERG_Precipitation_Rate` (Global Precipitation Measurement GPM IMERG Near Real-Time)  
-   - Layer: `Coastlines_15m` and `OSM_Land_Mask`
-2. **NASA Worldview Interactive Earth Data Portal**  
-   `https://worldview.earthdata.nasa.gov/`
-3. **NASA JPL Eyes on the Earth**  
-   `https://eyes.nasa.gov/apps/earth/`  
-   - 24-Hour Corrected Surface Reflectance Composite (VIIRS on Suomi NPP / NOAA-20 / NOAA-21)
-4. **NASA SVS 4285: Near Real-Time Global Precipitation Composite**  
-   `https://svs.gsfc.nasa.gov/4285/`
-5. **NASA SVS 13786: Data Sonification Framework (Caldwell 73)**  
-   `https://svs.gsfc.nasa.gov/13786/`
-6. **NASA SVS 5313: Change in Night Lights 2012-2023 (Black Marble)**  
-   `https://svs.gsfc.nasa.gov/5313/`
-7. **NASA SVS 5669: GEOS Aerosols Simulation**  
-   `https://svs.gsfc.nasa.gov/5669/`
-8. **NASA SVS 5011: Lightning Events Detected from the ISS 2017-2023**  
-   `https://svs.gsfc.nasa.gov/5011/`
-9. **NASA SVS 4950: GEDI Global Forest Canopy Height**  
-   `https://svs.gsfc.nasa.gov/4950/`
-10. **NASA SVS 5196: DYAMOND Global Carbon Dioxide Model**  
-    `https://svs.gsfc.nasa.gov/5196/`
-11. **NASA SVS 4960: 3D View of an Atmospheric River**  
-    `https://svs.gsfc.nasa.gov/4960/`
-12. **NASA SVS 5425: Perpetual Ocean 2 (Western Boundary Currents)**  
-    `https://svs.gsfc.nasa.gov/5425/`
-13. **NASA SVS 3912: Global Sea Surface Currents and Temperature**  
-    `https://svs.gsfc.nasa.gov/3912/`
-14. **NASA SVS 5533: Air Quality Model Runs**  
-    `https://svs.gsfc.nasa.gov/5533/`
-15. **NASA Earth Information Center (EIC) Content Database**  
-    `https://svs.gsfc.nasa.gov/gallery/earth-information-center/`
+Copy each pair directly into the NASA Space Apps submission form:
+
+1. **Link Text:** NASA Worldview Interactive Global Imagery Portal  
+   **Link URL:** https://worldview.earthdata.nasa.gov/
+
+2. **Link Text:** NASA Global Imagery Browse Services (GIBS)  
+   **Link URL:** https://earthdata.nasa.gov/gibs
+
+3. **Link Text:** NASA JPL Eyes on the Earth  
+   **Link URL:** https://eyes.nasa.gov/apps/earth/
+
+4. **Link Text:** NASA GPM IMERG Near Real-Time Global Precipitation Data  
+   **Link URL:** https://gpm.nasa.gov/data/imerg
+
+5. **Link Text:** NASA PO.DAAC GHRSST MUR Sea Surface Temperature Analysis  
+   **Link URL:** https://podaac.jpl.nasa.gov/dataset/MUR-JPL-L4-GLOB-v4.1
+
+6. **Link Text:** NASA Earth Observatory  
+   **Link URL:** https://earthobservatory.nasa.gov/
+
+7. **Link Text:** NASA Black Marble Nighttime Lights  
+   **Link URL:** https://blackmarble.gsfc.nasa.gov/
+
+8. **Link Text:** NASA GEDI Global Ecosystem Dynamics Investigation  
+   **Link URL:** https://science.nasa.gov/mission/gedi/
+
+9. **Link Text:** NASA OCO-2 Orbiting Carbon Observatory  
+   **Link URL:** https://ocov2.jpl.nasa.gov/
+
+10. **Link Text:** NASA Earth Information Center  
+    **Link URL:** https://science.nasa.gov/earth-science/earth-information-center/
 
 ---
 
