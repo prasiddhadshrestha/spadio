@@ -16,32 +16,32 @@ NASA's Earth Information Center (EIC) and Scientific Visualization Studio (SVS) 
 
 Spadio resolves this visual monoculture through two integrated environments:
 1. 2D SVS Laboratory Console: A high-precision tactile spectrometer that scans 48 spatial bands across 10 official NASA SVS datasets (including DYAMOND CO2, Black Marble, and GEDI canopy lidar), mapping pixel luminance, latitude, and color hues into scale-quantized harmonies via the native Web Audio API.
-2. 3D Live Earth: An interactive Three.js digital twin providing macro planetary context and sonifying near-real-time precipitation.
+2. 3D Live Earth: An interactive Three.js digital twin providing macro planetary context, sonifying daily NASA Worldview GHRSST sea surface temperature thermal maps and near-real-time GPM IMERG precipitation storm radar.
 
 Spadio turns silent satellite data into an accessible stethoscope for our living planet.
 
 ---
 
 ## 2. Project Demonstration (30-Second Video Script)
-*Hard rule: Must be 30.0 seconds or less. This script runs 28.5 seconds.*
+*Hard rule: Must be strictly 30.0 seconds or less. This script is calibrated to 51 words (~24.5 seconds spoken time) leaving a clean 5-second buffer.*
 
-### Shot List & Storyboard
-- **0:00 - 0:06 (Accessibility Demonstration):**
-  - *Visual:* Presenter sits with eyes closed, listening to headphones. 3D Earth runs on laptop in background.
-  - *Spoken (Presenter 1):* "My eyes are closed, but I can hear heavy storm bands crossing the equator."
-- **0:06 - 0:11 (Technical Overview):**
-  - *Visual:* Cut to presenter at the desk, gesturing to the running laptop screen.
-  - *Spoken (Presenter 2):* "This is Spadio. We convert NASA Earth science data into deterministic, real-time musical harmony."
-- **0:11 - 0:18 (Screen Recording: 2D SVS Console):**
-  - *Visual:* 48-band spectrometer sweeps across an SVS frame (Atmospheric River or Black Marble). Live spectrum jumps, frequency HUD displays exact Hz.
-  - *Spoken (Presenter 2):* "Our 2D console scans 48 spatial bands across 10 official NASA SVS datasets, mapping luminance to volume and latitude to quantized pitch."
-- **0:18 - 0:24 (Screen Recording: 3D Live Earth):**
-  - *Visual:* Smooth mouse rotation of the Three.js 3D globe showing atmospheric glow and live precipitation textures.
-  - *Spoken (Presenter 2):* "Switching to 3D Live Earth delivers global planetary context, sonifying real-time NASA precipitation and climate hotspots."
-- **0:24 - 0:28.5 (Title Card):**
-  - *Visual:* High-contrast card: SPADIO / Team Smooth Butter / NASA Space Apps 2026 / GitHub link. Chime fades out.
-  - *Spoken (Voiceover):* "Tune in to Spadio. Listen to Earth."
-- **0:28.5 - 0:29.0:** Hard cut to black (buffer).
+### Single-Narrator Screen Recording Storyboard
+- **0:00 - 0:08 (Clip 1 & 2: 2D SVS Console):**
+  - *Visual:* Screen recording of the 2D SVS Console at `https://prasiddhadshrestha.github.io/spadio/`. Mouse clicks Play, 48-band optical spectrometer sweeps across an SVS data strip, audio visualizer dances.
+  - *Voiceover:* "This is Spadio, the Earth Information Jukebox. We turn NASA satellite data into real-time sound. In our 2D console, we scan data strips from forest canopy to carbon plumes."
+- **0:08 - 0:20 (Clip 3 & 4: 3D Live Earth):**
+  - *Visual:* Click `🛰️ 3D Live Earth`. 3D globe rotates displaying the vibrant rainbow thermal Sea Surface Temperature map. Mouse clicks `03 Global Precipitation` and the globe immediately maps active storm fronts.
+  - *Voiceover:* "In our 3D view, we sweep daily ocean temperature and global storms in real time."
+- **0:20 - 0:25 (Clip 5: Interactive Sonification):**
+  - *Visual:* User adjusts sweep speed knob and clicks between synthesis styles (`Layers`, `Flow`, `Sparkle`).
+  - *Voiceover:* "Space science you can hear, explore, and feel."
+- **0:25 - 0:28.5 (Title Card):**
+  - *Visual:* Clean graphic title card:
+    - **SPADIO: The Earth Information Jukebox**
+    - Team: Smooth Butter | NASA Space Apps 2026
+    - Live App: `prasiddhadshrestha.github.io/spadio`
+  - *Audio:* Final musical chord rings out and fades to silence.
+- **0:28.5 - 0:30.0:** Clean silence / black frame buffer.
 
 ---
 
@@ -85,29 +85,41 @@ Generative AI tools (LLMs) were used strictly during the development phase as co
 
 ---
 
-## 5. NASA Data & Resources (11 Verified Links)
+## 5. NASA Data & Resources (Verified Citations)
 
-1. **NASA SVS 13786: Data Sonification Framework (Caldwell 73)**  
+1. **NASA EOSDIS / GIBS WMS EPSG:4326**  
+   `https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi`  
+   - Layer: `GHRSST_L4_MUR_Sea_Surface_Temperature` (PO.DAAC Group for High Resolution Sea Surface Temperature L4 analysis)  
+   - Layer: `IMERG_Precipitation_Rate` (Global Precipitation Measurement GPM IMERG Near Real-Time)  
+   - Layer: `Coastlines_15m` and `OSM_Land_Mask`
+2. **NASA Worldview Interactive Earth Data Portal**  
+   `https://worldview.earthdata.nasa.gov/`
+3. **NASA JPL Eyes on the Earth**  
+   `https://eyes.nasa.gov/apps/earth/`  
+   - 24-Hour Corrected Surface Reflectance Composite (VIIRS on Suomi NPP / NOAA-20 / NOAA-21)
+4. **NASA SVS 4285: Near Real-Time Global Precipitation Composite**  
+   `https://svs.gsfc.nasa.gov/4285/`
+5. **NASA SVS 13786: Data Sonification Framework (Caldwell 73)**  
    `https://svs.gsfc.nasa.gov/13786/`
-2. **NASA SVS 5313: Change in Night Lights 2012-2023 (Black Marble)**  
+6. **NASA SVS 5313: Change in Night Lights 2012-2023 (Black Marble)**  
    `https://svs.gsfc.nasa.gov/5313/`
-3. **NASA SVS 5669: GEOS Aerosols Simulation**  
+7. **NASA SVS 5669: GEOS Aerosols Simulation**  
    `https://svs.gsfc.nasa.gov/5669/`
-4. **NASA SVS 5011: Lightning Events Detected from the ISS 2017-2023**  
+8. **NASA SVS 5011: Lightning Events Detected from the ISS 2017-2023**  
    `https://svs.gsfc.nasa.gov/5011/`
-5. **NASA SVS 4950: GEDI Global Forest Canopy Height**  
+9. **NASA SVS 4950: GEDI Global Forest Canopy Height**  
    `https://svs.gsfc.nasa.gov/4950/`
-6. **NASA SVS 5196: DYAMOND Global Carbon Dioxide Model**  
-   `https://svs.gsfc.nasa.gov/5196/`
-7. **NASA SVS 4960: 3D View of an Atmospheric River**  
-   `https://svs.gsfc.nasa.gov/4960/`
-8. **NASA SVS 5425: Perpetual Ocean 2 (Western Boundary Currents)**  
-   `https://svs.gsfc.nasa.gov/5425/`
-9. **NASA SVS 3912: Global Sea Surface Currents and Temperature**  
-   `https://svs.gsfc.nasa.gov/3912/#media_group_349716`
-10. **NASA SVS 5533: Air Quality Model Runs**  
+10. **NASA SVS 5196: DYAMOND Global Carbon Dioxide Model**  
+    `https://svs.gsfc.nasa.gov/5196/`
+11. **NASA SVS 4960: 3D View of an Atmospheric River**  
+    `https://svs.gsfc.nasa.gov/4960/`
+12. **NASA SVS 5425: Perpetual Ocean 2 (Western Boundary Currents)**  
+    `https://svs.gsfc.nasa.gov/5425/`
+13. **NASA SVS 3912: Global Sea Surface Currents and Temperature**  
+    `https://svs.gsfc.nasa.gov/3912/`
+14. **NASA SVS 5533: Air Quality Model Runs**  
     `https://svs.gsfc.nasa.gov/5533/`
-11. **NASA SVS: Earth Information Center Content Database**  
+15. **NASA Earth Information Center (EIC) Content Database**  
     `https://svs.gsfc.nasa.gov/gallery/earth-information-center/`
 
 ---
