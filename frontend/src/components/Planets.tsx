@@ -1,11 +1,12 @@
 import React, { useRef, useMemo } from 'react';
 import { useFrame, useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
+import { resolveTextureUrl } from '../utils/textureUrl';
 
 // Photorealistic Mars using NASA Viking/MGS orbital mosaic
 export const Mars: React.FC = () => {
   const marsRef = useRef<THREE.Mesh>(null);
-  const marsTexture = useLoader(THREE.TextureLoader, '/textures/mars.jpg');
+  const marsTexture = useLoader(THREE.TextureLoader, resolveTextureUrl('textures/mars.jpg'));
 
   useMemo(() => {
     marsTexture.colorSpace = THREE.SRGBColorSpace;
@@ -38,7 +39,7 @@ export const Moon: React.FC<{ orbitRadius?: number; speed?: number; size?: numbe
   size = 0.08,
 }) => {
   const moonRef = useRef<THREE.Mesh>(null);
-  const moonTexture = useLoader(THREE.TextureLoader, '/textures/moon.jpg');
+  const moonTexture = useLoader(THREE.TextureLoader, resolveTextureUrl('textures/moon.jpg'));
 
   useMemo(() => {
     moonTexture.colorSpace = THREE.SRGBColorSpace;
@@ -69,7 +70,7 @@ export const Moon: React.FC<{ orbitRadius?: number; speed?: number; size?: numbe
 // Realistic Saturn with gas bands and ring system (with Cassini division)
 export const Saturn: React.FC = () => {
   const saturnBodyRef = useRef<THREE.Mesh>(null);
-  const saturnTexture = useLoader(THREE.TextureLoader, '/textures/saturn.jpg');
+  const saturnTexture = useLoader(THREE.TextureLoader, resolveTextureUrl('textures/saturn.jpg'));
 
   useMemo(() => {
     saturnTexture.colorSpace = THREE.SRGBColorSpace;

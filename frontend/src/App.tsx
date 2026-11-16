@@ -20,6 +20,7 @@ import {
   ScaleId,
   StyleId,
 } from './sonification/presets';
+import { resolveTextureUrl } from './utils/textureUrl';
 
 export interface HotspotRegion {
   id: string;
@@ -41,32 +42,32 @@ const REGION_TRACK_MAP: Record<
   { textureUrl: string; defaultStyle: StyleId; label: string }
 > = {
   sea_surface_temp: {
-    textureUrl: '/textures/sea_surface_temperature.png',
+    textureUrl: resolveTextureUrl('textures/sea_surface_temperature.png'),
     defaultStyle: 'flow',
     label: 'Sea Surface Temperature (NASA Worldview GHRSST)',
   },
   worldview_sst: {
-    textureUrl: '/textures/sea_surface_temperature.png',
+    textureUrl: resolveTextureUrl('textures/sea_surface_temperature.png'),
     defaultStyle: 'flow',
     label: 'Sea Surface Temperature (NASA Worldview GHRSST)',
   },
   current_snow_rain: {
-    textureUrl: '/textures/worldview_snow_and_rain.png',
+    textureUrl: resolveTextureUrl('textures/worldview_snow_and_rain.png'),
     defaultStyle: 'duet',
     label: 'Current Snow & Rain (NASA Worldview IMERG)',
   },
   worldview_snow_rain: {
-    textureUrl: '/textures/worldview_snow_and_rain.png',
+    textureUrl: resolveTextureUrl('textures/worldview_snow_and_rain.png'),
     defaultStyle: 'duet',
     label: 'Current Snow & Rain (NASA Worldview IMERG)',
   },
   eyes_on_earth: {
-    textureUrl: '/textures/eyes_on_earth_now.jpg',
+    textureUrl: resolveTextureUrl('textures/eyes_on_earth_now.jpg'),
     defaultStyle: 'duet',
     label: "NASA's Eyes on the Earth Live Satellite Mosaic",
   },
   realtime_precipitation: {
-    textureUrl: '/textures/imergert_1080p.now.png',
+    textureUrl: resolveTextureUrl('textures/imergert_1080p.now.png'),
     defaultStyle: 'layers',
     label: 'Real-Time Global Precipitation (NASA SVS 4285)',
   },
@@ -212,7 +213,7 @@ export const App: React.FC = () => {
   const [currentCaption, setCurrentCaption] = useState<string>('');
 
   // Planetary Image Texture State - Defaults to NASA Worldview Sea Surface Temperature
-  const [textureUrl, setTextureUrl] = useState<string>('/textures/sea_surface_temperature.png');
+  const [textureUrl, setTextureUrl] = useState<string>(resolveTextureUrl('textures/sea_surface_temperature.png'));
   const [customTexture, setCustomTexture] = useState<THREE.CanvasTexture | null>(null);
   const [customImageName, setCustomImageName] = useState<string>('');
   const [isCustomLoaded, setIsCustomLoaded] = useState<boolean>(false);
@@ -384,7 +385,7 @@ export const App: React.FC = () => {
       'worldview_sst',
       'Scraping NASA Worldview Sea Surface Temperature...',
       'Receiving real-time GHRSST MUR Sea Surface Temperature from NASA Worldview...',
-      '/textures/sea_surface_temperature.png'
+      resolveTextureUrl('textures/sea_surface_temperature.png')
     );
   }, [loadNasaDatasetFromBackend]);
 
@@ -527,7 +528,7 @@ export const App: React.FC = () => {
           'worldview_sst',
           'Scraping NASA Worldview Sea Surface Temperature...',
           'Receiving real-time GHRSST MUR Sea Surface Temperature from NASA Worldview...',
-          '/textures/sea_surface_temperature.png'
+          resolveTextureUrl('textures/sea_surface_temperature.png')
         );
       }
       // 2. If Current Snow and Rain is selected (NASA Worldview IMERG & Land Mask)
@@ -536,7 +537,7 @@ export const App: React.FC = () => {
           'worldview_snow_rain',
           'Scraping NASA Worldview Snow & Rain...',
           'Receiving real-time IMERG Precipitation Rate & Land Mask from NASA Worldview...',
-          '/textures/worldview_snow_and_rain.png'
+          resolveTextureUrl('textures/worldview_snow_and_rain.png')
         );
       }
       // 2. If Real-Time Global Precipitation is selected (NASA SVS 4285)
@@ -545,7 +546,7 @@ export const App: React.FC = () => {
           'precipitation',
           'Scraping NASA SVS 4285 Precipitation...',
           'Receiving direct image URL for near real-time global GPM IMERG composite...',
-          '/textures/imergert_1080p.now.png'
+          resolveTextureUrl('textures/imergert_1080p.now.png')
         );
       }
       // 3. If Eyes on Earth Live is selected (NASA Eyes on Earth - Visible Earth Panel)
@@ -554,7 +555,7 @@ export const App: React.FC = () => {
           'eyes_on_earth',
           "Scraping NASA's Eyes on the Earth Live Mosaic...",
           'Receiving direct image URL from NOAA-21 / VIIRS true-color 24-hour composite...',
-          '/textures/eyes_on_earth_now.jpg'
+          resolveTextureUrl('textures/eyes_on_earth_now.jpg')
         );
       }
       // 4. For other preset tracks, load their respective planetary textures
