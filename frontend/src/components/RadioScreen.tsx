@@ -309,7 +309,7 @@ export const RadioScreen: React.FC<RadioScreenProps> = ({
             <div className="flex items-center gap-3 pointer-events-auto">
               <nav className="flex items-center gap-1.5 p-1 rounded-full bg-[#0a0d14]/92 backdrop-blur-md border border-white/[0.18] shadow-2xl">
                 <a
-                  href="/"
+                  href="../index.html"
                   onClick={(e) => {
                     // Fall back to in-app 2D view if standalone dev server redirects root /
                     if (window.location.pathname === '/live-earth/' || window.location.pathname === '/live-earth') {
