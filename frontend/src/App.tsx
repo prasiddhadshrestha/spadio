@@ -189,6 +189,11 @@ function formatActiveMetric(regionId: string, rawVal: number | undefined): strin
   return rawVal.toFixed(2);
 }
 
+// Helper to check if running in local development environment
+const isLocalDev =
+  typeof window !== 'undefined' &&
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
 export const App: React.FC = () => {
   const sonificationEngine = useMemo(() => new SonificationEngine(), []);
   const narrator = useMemo(() => new Narrator(), []);
@@ -257,8 +262,9 @@ export const App: React.FC = () => {
     });
   }
 
-  // Load backend regions if available, fallback gracefully
+  // Load backend regions if running locally, otherwise use verified fallback regions
   useEffect(() => {
+    if (!isLocalDev) return;
     fetch('http://localhost:8000/api/regions')
       .then((res) => res.json())
       .then((data) => {
@@ -305,6 +311,12 @@ export const App: React.FC = () => {
       setIsEarthLoading(true);
       setEarthLoadingMessage(loadingMsg);
       setEarthLoadingSubMessage(loadingSubMsg);
+
+      // On production/GitHub Pages, use bundled live NASA datasets directly without localhost latency or security popups
+      if (!isLocalDev) {
+        applyTextureWithSkeleton(fallbackTextureUrl);
+        return;
+      }
 
       const endpoint =
         dataset === 'eyes_on_earth'
@@ -391,6 +403,10 @@ export const App: React.FC = () => {
 
   // Fetch telemetry for selected region
   useEffect(() => {
+    if (!isLocalDev) {
+      setRegionDetail(FALLBACK_DETAILS[selectedRegionId] || FALLBACK_DETAILS.current_snow_rain);
+      return;
+    }
     fetch(`http://localhost:8000/api/region/${selectedRegionId}`)
       .then((res) => {
         if (!res.ok) throw new Error('Not found');
